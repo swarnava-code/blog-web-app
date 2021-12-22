@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Posts</title>
+</head>
+<body>
+
+
+<table>
+    <thead>
+    <tr>
+        <th> Title </th>
+        <th> Excerpt </th>
+        <th> Author </th>
+        <th> Published at </th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${posts_list.empty}">
+        <td colspan="2"> No Posts Available </td>
+    </tr>
+    <tr th:each="post : ${posts_list}">
+        <td><span th:text="${post.title}"> </span></td>
+        <td><span th:text="${post.excerpt}"> </span></td>
+        <td><span th:text="${post.author}"> </span></td>
+        <td><span th:text="${post.published_at}"> </span></td>
+
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

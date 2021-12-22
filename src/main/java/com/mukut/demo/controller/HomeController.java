@@ -4,6 +4,7 @@ import com.mukut.demo.entity.Posts;
 import com.mukut.demo.entity.User;
 import com.mukut.demo.repo.PostsRepository;
 import com.mukut.demo.repo.UserRepository;
+import com.mukut.demo.service.PostService;
 import com.mukut.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,14 +21,6 @@ public class HomeController {
 
     @Autowired
     private PostsRepository postsRepository;
-
-//    @Autowired
-//    public UserRepository userRepository ;
-
-//    @Autowired
-//    public UserService userService;
-
-
 
 
     @GetMapping("/")
@@ -55,6 +48,16 @@ public class HomeController {
         model.addAttribute("heading_message", "Your blog successfully submitted");
         model.addAttribute("message", post_inserted.getTitle()+" successfully posted.\n");
         return "welcome";
+    }
+
+    @GetMapping("/blogslist")
+    public String getPostList (
+            Model model
+    ) {
+        List<Posts> thePosts = new PostService().findAll(postsRepository);
+        model.addAttribute("posts_list", thePosts);
+        //model.addAttribute("user5", postsRepository.findById(5).toString());
+        return "posts/posts_list";
     }
 
     //################################################# for user

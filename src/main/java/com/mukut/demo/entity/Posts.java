@@ -36,10 +36,6 @@ public class Posts {
     String updated_at;
 
 
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-
     @Override
     public String toString() {
         return "Posts{" +
@@ -53,10 +49,6 @@ public class Posts {
                 ", updated_at='" + updated_at + '\'' +
                 '}';
     }
-
-//    public int getId() {
-//        return id;
-//    }
 
     public void setTitle(String title) {
         this.title = title;
