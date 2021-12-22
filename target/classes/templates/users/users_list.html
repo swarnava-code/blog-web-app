@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+</head>
+<body>
+
+user 5 fname:
+<h3 th:text="${user5}">user 5 fname</h3>
+
+
+<table>
+    <thead>
+    <tr>
+        <th> Email </th>
+        <th> First Name </th>
+        <th> Last Name </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${users_list.empty}">
+        <td colspan="2"> No Books Available </td>
+    </tr>
+    <tr th:each="book : ${users_list}">
+        <td><span th:text="${book.email}"> email </span></td>
+        <td><span th:text="${book.fname}"> fname </span></td>
+        <td><span th:text="${book.lname}"> lname </span></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

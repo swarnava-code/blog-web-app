@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome Page</title>
+    <!-- reference CSS file -->
+    <link rel="stylesheet"
+          th:href="@{/css/styles.css}" />
+</head>
+<body>
+<h1 th:text="${heading_message}">heading_message</h1><br>
+<h3 th:text="${message}">message</h3>
+
+
+</body>
+</html>

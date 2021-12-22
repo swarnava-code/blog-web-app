@@ -1,0 +1,83 @@
+body {
+    background-color: blueviolet;
+    background-image: url("/picture/bg.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #ffffff;
+    justify-content: center;
+    display: grid;
+    text-align: center;
+}
+
+#survey-form {
+    text-align: left;
+    backdrop-filter: blur(10px);
+    border-radius: 7px;
+    padding: 50px;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.form-group-input {
+    width: 100%;
+    padding: 10px;
+}
+
+.form-group-button {
+    text-align: end;
+}
+
+.form-group-option {
+    padding: 10px;
+    width: 50%;
+}
+
+.form-group {
+    width: 100%;
+    margin: 10px;
+    padding: 10px;
+}
+
+.form-group-checked {
+    width: auto;
+    margin: 10px;
+    padding: 10px;
+}
+
+.form-group-radio {
+    display: grid;
+    width: auto;
+    margin: 10px;
+    padding: 10px;
+}
+
+input,
+select,
+option {
+    width: 90%;
+    padding: 10px;
+}
+
+.checkbox {
+    width: auto;
+}
+
+input[type="radio"] {
+    width: auto;
+}
+
+#submit,
+#clear {
+    font-style: italic;
+    font-size: 99%;
+    text-align: center;
+    padding: 10px;
+    background-color: khaki;
+    width: 30%;
+    border-radius: 5px;
+}
+
+#submit:active,
+#clear:active {
+    font-size: 100%;
+    background-color: rgb(243, 228, 96);
+}
