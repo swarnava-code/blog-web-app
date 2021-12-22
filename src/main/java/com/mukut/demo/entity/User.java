@@ -11,6 +11,14 @@ public class User {
     @Column(name = "sn")
     private int id;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Column(name = "firstname")
     private String fname;
 

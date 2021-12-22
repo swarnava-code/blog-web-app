@@ -36,7 +36,7 @@ public class HomeController {
 
     @GetMapping("/newpost")
     public String newpost(){
-        return "newpost";
+        return "posts/newpost";
     }
 
     @PostMapping("/newpost_submitted")
@@ -44,7 +44,7 @@ public class HomeController {
             @ModelAttribute Posts posts,
             Model model
     ) {
-        Posts post_inserted = postsRepository.save(posts);
+        Posts post_inserted = new PostService().save(postsRepository, posts);
         model.addAttribute("heading_message", "Your blog successfully submitted");
         model.addAttribute("message", post_inserted.getTitle()+" successfully posted.\n");
         return "welcome";
@@ -86,8 +86,23 @@ public class HomeController {
         List<User> theUsers = new UserService().findAll(userRepository);
         model.addAttribute("users_list", theUsers);
         model.addAttribute("user5", userRepository.findById(5).toString());
+
         return "users/users_list";
     }
+
+    //####################################update
+
+//    @PostMapping("/update")
+//    public String updateTest(
+//            @ModelAttribute User user,
+//            Model model
+//    ) {
+//        mo
+//        userRepository.save();
+//        User userDetails = new UserService().save(userRepository ,user);
+//        model.addAttribute("message", userDetails.getFname()+" inserted.\n");
+//        return "welcome";
+//    }
 
     //################################################# practice to use service
 
