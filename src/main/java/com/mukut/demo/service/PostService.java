@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -25,6 +26,19 @@ public class PostService {
         return postsRepository.findAll();
     }
 
+    public Post findPostById(PostRepository postRepository, int id){
+        Optional<Post> optionalResult = postRepository.findById(id);
+        Post post = null;
+
+        if (optionalResult.isPresent()) {
+            post = optionalResult.get();
+        }
+        else {
+            throw new RuntimeException("Did not find post id - " + id);
+        }
+        return post;
+    }
+
     public static String makeDataAndTime() {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/mm/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
@@ -34,4 +48,6 @@ public class PostService {
         String excerpt = content.substring(0, Math.min(content.length(), EXCERPT_LIMIT))+"...";
         return excerpt;
     }
+
+
 }

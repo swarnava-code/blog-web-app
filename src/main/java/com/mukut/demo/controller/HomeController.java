@@ -102,6 +102,28 @@ public class HomeController {
         return "user/users_list";
     }
 
+//showBlogPost
+
+    @GetMapping("/showBlogPost")
+    public String showFormForUpdate(
+            @RequestParam("postId") int postId,
+            Model model) {
+
+        // get the employee from the service
+        Post post = null;
+        try{
+            post = new PostService().findPostById(postRepository ,postId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        model.addAttribute("post", post);
+
+        System.out.println("\n\n\n\n\n\n\n\ncontent: "+post.toString()+"\n\n\n\n\n\n\n\n");
+
+        return "post/show_post";
+    }
+
+
     //####################################update
 //    @PostMapping("/update")
 //    public String updateTest(
