@@ -2,27 +2,90 @@
 <html lang="en" xmlns:th="www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <title>Post</title>
+    <style>
+    body {
+    background-color: #0f0f0f;
+    background-size: 100%;
+    background-attachment: fixed;
+    color: #809598;
+    text-align: center;
+    justify-content: space-between;
+}
+        author, date, comma {
+    font-size: 17px;
+    color: azure;
+}
+story{
+    font-size: 25px;
+    color: azure;
+}
+title_name {
+    color: #FFFFFF;
+    font-size: 35px;
+    color: azure;
+}
+    </style>
 </head>
 <body>
-
   <center>
+      <div class="project">
+          <title_name th:text="${post.title}">Basic Concept of IoC & Dependency Injection in Spring Framework</title_name>
+          <br><hr>
+          <author th:text="${post.author}">Swarnava Kumar Chakraborty</author>
+          <comma>,</comma>
+          <date th:text="${post.published_at}">12/09/2020</date>
+          <br><hr>
+          <story th:text="${post.content}">Before starting IoC, it is important to know what is Loosely Coupling Components. Loosely Coupling Components are weakly associated with…</story>
+      </div>
 
-<!--    <div th:if="${post.empty}">-->
-<!--      <div>No Posts Available :(</div>-->
-<!--    </div>-->
-<!-- -->
-<!--    <div th:unless="${post.empty}">-->
-<!--      <h1 th:text="${post.title}"></h1>-->
-<!--      <h3 th:text="${post.author}"></h3>-->
-<!--      <h3 th:text="${post.published_at}"></h3>-->
-<!--      <h5 th:text="${post.content}"></h5>-->
-<!--    </div>-->
 
+
+
+
+
+
+<br>
+      <table>
+          <thead>
+          <tr>
+              <th> Tag </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:if="${tags.empty}">
+              <td colspan="2"> No Tag Available </td>
+          </tr>
+          <tr th:each="tag : ${tags}">
+              <td><span th:text="${tag.name}"> </span></td>
+          </tr>
+          </tbody>
+      </table>
+
+
+
+
+
+
+
+
+
+      <br><br><hr>
+      <h3>Enter your comment</h3><br>
+      <form action="comments" method="post">
+<!--          <input th:text="${post.id}" type="text" name="postId" /><br>-->
+          <input type="text" name="name" placeholder="Enter Name" /><br><br>
+          <input type="text" name="email" placeholder="Enter mail" /><br><br>
+          <input type="text" name="comment" placeholder="Enter Comment" /><br><br>
+<!--          <a th:href="@{/showBlogPost(postId=${post.id})}"-->
+<!--             class="btn btn-info btn-sm">-->
+<!--              Read-->
+<!--          </a>-->
+          <button type="submit">Comment</button>
+      </form>
   </center>
-
-  <!--  <div th:text=" 'Hi,' + ${customer.name}">Hi, User</div>-->
-<!--  title, content, author, published DateTime and tags.-->
-
 </body>
 </html>

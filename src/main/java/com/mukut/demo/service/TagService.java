@@ -19,12 +19,19 @@ public class TagService {
         for(String tag : tagList){
             Tag tagEntity = new Tag();
             tagEntity.setPostId(id);
-            tagEntity.setCreated_at(createdAt);
-            tagEntity.setUpdated_at(updatedAt);
+            tagEntity.setCreatedAt(createdAt);
+            tagEntity.setUpdatedAt(updatedAt);
             tagEntity.setName(tag);
             tagRepository.save(tagEntity);
             System.out.println(tagEntity.toString());
         }
     }
 
+    public List<Post> findAll(PostRepository postsRepository){
+        return postsRepository.findAll();
+    }
+
+    public List<Tag> findByPostId(TagRepository tagRepository, Integer postId){
+        return tagRepository.findByPostId(postId);
+    }
 }

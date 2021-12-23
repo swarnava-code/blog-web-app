@@ -1,10 +1,14 @@
 package com.mukut.demo.controller;
 
+import com.mukut.demo.entity.Comment;
 import com.mukut.demo.entity.Post;
+import com.mukut.demo.entity.Tag;
 import com.mukut.demo.entity.User;
+import com.mukut.demo.repo.CommentRepository;
 import com.mukut.demo.repo.PostRepository;
 import com.mukut.demo.repo.TagRepository;
 import com.mukut.demo.repo.UserRepository;
+import com.mukut.demo.service.CommentService;
 import com.mukut.demo.service.PostService;
 import com.mukut.demo.service.TagService;
 import com.mukut.demo.service.UserService;
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.HTML;
 import java.util.List;
 
 @Controller
@@ -26,6 +31,9 @@ public class HomeController {
 
     @Autowired
     private TagRepository tagRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @GetMapping("/")
     public String index(Model model) {
@@ -48,7 +56,6 @@ public class HomeController {
     }
 
 
-
     @PostMapping("/newpost_submitted")
     public String newpost_submit(
             @ModelAttribute Post posts,
@@ -63,12 +70,14 @@ public class HomeController {
     }
 
     @GetMapping("/blogslist")
-    public String getPostList (
-            Model model
+    public String getBlogList (
+            Model model1,
+            Model model2
     ) {
+
         List<Post> thePosts = new PostService().findAll(postRepository);
-        model.addAttribute("posts_list", thePosts);
-        //model.addAttribute("user5", postsRepository.findById(5).toString());
+        model1.addAttribute("posts_list", thePosts);
+        
         return "post/posts_list";
     }
 
@@ -98,31 +107,71 @@ public class HomeController {
         List<User> theUsers = new UserService().findAll(userRepository);
         model.addAttribute("users_list", theUsers);
         model.addAttribute("user5", userRepository.findById(5).toString());
-
         return "user/users_list";
     }
 
-//showBlogPost
-
     @GetMapping("/showBlogPost")
-    public String showFormForUpdate(
+    public String showBlogPost(
             @RequestParam("postId") int postId,
-            Model model) {
-
-        // get the employee from the service
+            Model model1,
+            Model model2
+    ) {
         Post post = null;
         try{
             post = new PostService().findPostById(postRepository ,postId);
         }catch (Exception e){
             e.printStackTrace();
         }
-        model.addAttribute("post", post);
+        List<Tag> tagList = new TagService().findByPostId(tagRepository, postId); //tagRepository.findByPostId(postId);
+        System.out.println(tagList);
+
+        model1.addAttribute("post", post);
+        model2.addAttribute("tags", tagList);
 
         System.out.println("\n\n\n\n\n\n\n\ncontent: "+post.toString()+"\n\n\n\n\n\n\n\n");
 
         return "post/show_post";
     }
 
+
+
+
+
+
+
+
+
+
+
+    @PostMapping("/comments")
+    public String comments(
+            @ModelAttribute Comment comment,
+            Model model
+    ) {
+
+        List<Post> thePosts = new TagService().findAll(postRepository);
+        model.addAttribute("posts_list", thePosts);
+        //model.addAttribute("user5", postsRepository.findById(5).toString());
+        return "post/posts_list";
+
+
+//
+//        model.addAttribute("message", comment.getName()+", your comment posted.\n");
+//        System.out.println(comment.toString());
+//        return "welcome";
+
+
+        // Comment commentInserted = new CommentService().save(commentRepository, comment);
+        //return "post/posts_list";  //showBlogPost?postId=31
+    }
+
+
+//        Post postInserted = new PostService().save(postRepository, posts);
+//        new TagService().saveEachTag(tagRepository, tags, postInserted.getId(), postInserted.getCreated_at(), postInserted.getUpdated_at());
+//        model.addAttribute("heading_message", "Your blog successfully submitted");
+//        model.addAttribute("message", "Your post, '"+postInserted.getTitle()+"' with the tag : ("+tags+") successfully posted.\n");
+//
+//
 
     //####################################update
 //    @PostMapping("/update")
