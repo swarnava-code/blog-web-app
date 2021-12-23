@@ -59,6 +59,7 @@
               <th> Posted on </th>
               <th> Last modified </th>
               <th> Comment </th>
+              <th> Action </th>
           </tr>
           </thead>
           <tbody>
@@ -70,6 +71,17 @@
               <td><span th:text="${comment.createdAt}"> </span></td>
               <td><span th:text="${comment.updatedAt}"> </span></td>
               <td><span th:text="${comment.comment}"> </span></td>
+              <td>
+                  <a th:href="@{showBlogPost/updateComment(id=${comment.id})}"
+                     class="btn btn-info btn-sm">
+                      Update
+                  </a>
+                  <a th:href="@{showBlogPost/deleteComment(id=${comment.id})}"
+                     class="btn btn-danger btn-sm"
+                     onclick="if (!(confirm('Are you sure you want to delete this comment?'))) return false">
+                      Delete
+                  </a>
+              </td>
           </tr>
           </tbody>
       </table>

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.HTML;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class HomeController {
@@ -50,14 +51,22 @@ public class HomeController {
             Model model
     ) {
         List<Post> thePosts;
-        if(keyword==null){
+        if(keyword==null) {
             thePosts = new PostService().findAll(postRepository);
-        }else{
-            try{
-                thePosts = postRepository.findByKeyword(keyword);
-            }catch (Exception e){
-                thePosts = new PostService().findAll(postRepository);
-            }
+        } else {
+            thePosts = postRepository.findByKeyword(keyword);
+//            List<Tag> tagList = tagRepository.findByTag(keyword);
+//            for(Tag tag : tagList){
+//                if(!thePosts.contains(tag.getPostId())){
+//                    int postId = tag.getPostId();
+//                    // postRepository.findById(postId);
+//                    //thePosts.add();
+//                    Optional<Post> postResult = postRepository.findById(postId);
+//                    for(Post post: postResult) {
+//
+//                    }
+//                }
+//            }
         }
         model.addAttribute("posts_list", thePosts);
         return "post/posts_list";
@@ -80,6 +89,28 @@ public class HomeController {
         model.addAttribute("post", post);
         return "post/update_post";
     }
+
+    @GetMapping("/showBlogPost/deleteComment")
+    public String deleteComment(
+            @RequestParam(value="id", required=false) int id
+    ) {
+        Optional<Comment> commentResult = commentRepository.findById(id);
+        commentRepository.deleteById(id);
+        return "redirect:/showBlogPost?postId="+commentResult.get().getPostId();
+    }
+
+    @GetMapping("/showBlogPost/updateComment")
+    public String updateComment(
+            @RequestParam("postId") int postId,
+            @RequestParam("id") int id,
+            Model model
+    ) {
+        Post post = postRepository.getById(id);
+        model.addAttribute("post", post);
+        return "post/update_post";
+    }
+
+
 
     @PostMapping("post_updated")
     public String postUpdate(

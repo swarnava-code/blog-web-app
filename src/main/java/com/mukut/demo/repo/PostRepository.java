@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
     //Custom query
-    @Query(value = "select * from posts s where s.title like %:keyword% or s.author like %:keyword%", nativeQuery = true)
+    @Query(value = "select * from posts s where s.title like %:keyword% or s.author like %:keyword% or s.content like %:keyword%", nativeQuery = true)
     List<Post> findByKeyword(@Param("keyword") String keyword);
 }
