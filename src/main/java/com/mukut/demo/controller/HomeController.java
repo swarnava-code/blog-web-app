@@ -63,6 +63,14 @@ public class HomeController {
         return "post/posts_list";
     }
 
+    @GetMapping("/deleteBlogPost")
+    public String deleteBlogPost(
+            @RequestParam("postId") int postId
+    ) {
+        postRepository.deleteById(postId);
+        return "redirect:/"; //eturn "redirect:/showBlogPost?postId="+comment.getPostId();
+    }
+
 
 
 //    //blog list to include tag
