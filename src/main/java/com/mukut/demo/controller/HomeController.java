@@ -71,15 +71,20 @@ public class HomeController {
 
     @GetMapping("/blogslist")
     public String getBlogList (
-            Model model1,
-            Model model2
+            @RequestParam(value = "search", required = false) String keyword,
+            Model model
     ) {
-
-        List<Post> thePosts = new PostService().findAll(postRepository);
-        model1.addAttribute("posts_list", thePosts);
-
+        List<Post> thePosts;
+        if(keyword==null){
+            thePosts = new PostService().findAll(postRepository);
+        }else{
+            thePosts = postRepository.findByKeyword(keyword);
+        }
+        model.addAttribute("posts_list", thePosts);
         return "post/posts_list";
     }
+
+
 
     //################################################# for user
 
@@ -134,16 +139,27 @@ public class HomeController {
         return "post/show_post";
     }
 
+
     @PostMapping("/comments_submitted")
     public String comments(
-            @ModelAttribute("comments") Comment comment,
-            Model model
+            @ModelAttribute("comments") Comment comment
     ) {
         System.out.println("\n\ngettingFromHTMLForm:\n"+comment+"\n\n");
         Comment comment_inserted = new CommentService().save(commentRepository ,comment);
-        model.addAttribute("message", comment.getName()+ ", Your comment submitted.");
-
-        return "welcome";
+        return "redirect:/showBlogPost?postId="+comment.getPostId();
     }
+
+
+
+//    findByKeyword
+//
+//    @GetMapping("/comments_submitted")
+//    public String comments(
+//            @ModelAttribute("comments") Comment comment
+//    ) {
+//        System.out.println("\n\ngettingFromHTMLForm:\n"+comment+"\n\n");
+//        Comment comment_inserted = new CommentService().save(commentRepository ,comment);
+//        return "redirect:/showBlogPost?postId="+comment.getPostId();
+//    }
 
 }

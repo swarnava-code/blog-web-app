@@ -17,10 +17,48 @@
     </style>
 </head>
 <body>
+
+
+<hr/>
+<div class="nav">
+    <div class="form-group-option">
+        <div class="form-group-input">
+            <form th:action="@{/blogslist}">
+                <input type="text" th:name="search"/>
+                <input type="submit"/>
+            </form>
+
+        </div>
+
+
+        <select name="filter" id="filter">
+            <option value="challenges">Filter</option>
+            <option value="projects">Projects</option>
+            <option value="community">Community</option>
+            <option value="opensource">Open Source</option>
+        </select>
+
+
+        <select name="sort" id="sort">
+            <option value="challenges">Sort</option>
+            <option value="projects">Projects</option>
+            <option value="community">Community</option>
+            <option value="opensource">Open Source</option>
+        </select>
+
+
+    </div>
+
+
+</div>
+
+<br>
+
+
+
 <table>
     <thead>
     <tr>
-<!--        <th> hidden id </th>-->
         <th> Title </th>
         <th> Excerpt </th>
         <th> Author </th>
@@ -33,7 +71,6 @@
         <td colspan="2"> No Posts Available </td>
     </tr>
     <tr th:each="post : ${posts_list}">
-<!--        <td><span th:text="${post.id}"></span> </td>-->
         <td><span th:text="${post.title}"> </span></td>
         <td><span th:text="${post.excerpt}"> </span></td>
         <td><span th:text="${post.author}"> </span></td>
@@ -47,5 +84,6 @@
     </tr>
     </tbody>
 </table>
+
 </body>
 </html>

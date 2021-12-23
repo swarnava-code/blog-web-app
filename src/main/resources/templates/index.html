@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<h3 th:text="${page}">landing msg</h3>
-
-<form action="register" method="get">
-    <button type="submit">Regiter</button>
-</form>
+<h3 th:text="${page}">landing page</h3>
 
 <br>
 <form action="newpost" method="get">
-    <button type="submit">Create New Post</button>
-</form>
-
-<br>
-<form action="userslist" method="get">
-    <button type="submit">Make Users list</button>
+    <button type="submit">Create New Blog Post</button>
 </form>
 
 <br>
 <form action="blogslist" method="get">
     <button type="submit">Show Blog list</button>
+</form>
+
+<br>
+<hr>
+
+<form action="userslist" method="get">
+    <button type="submit">Make Users list</button>
+</form>
+
+<form action="register" method="get">
+    <button type="submit">Regiter</button>
 </form>
 
 

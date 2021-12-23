@@ -7,31 +7,19 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <title>Post</title>
     <style>
-    body {
-        background-color: #0f0f0f;
-        background-size: 100%;
-        background-attachment: fixed;
-        color: #809598;
-        text-align: center;
-        justify-content: space-between;
+    body{
+    margin:20px;
+    padding:20px;
     }
-    author, date, comma {
-        font-size: 17px;
-        color: azure;
-    }
-    story{
-        font-size: 25px;
-        color: azure;
-    }
-    title_name {
-        color: #FFFFFF;
-        font-size: 35px;
-        color: azure;
+    td, th{
+    margin:5px;
+    padding:5px;
     }
     </style>
 </head>
 <body>
   <center>
+      <br>
       <div class="project">
           <title_name th:text="${post.title}">Basic Concept of IoC & Dependency Injection in Spring Framework</title_name>
           <br><hr>
@@ -44,7 +32,7 @@
 <br>
 
 
-
+      <br><br><hr>
 
       <table>
           <thead>
@@ -62,6 +50,7 @@
           </tbody>
       </table>
 
+      <br><br><hr>
 
       <table>
           <thead>
