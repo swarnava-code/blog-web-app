@@ -35,11 +35,35 @@ public class HomeController {
     @Autowired
     private CommentRepository commentRepository;
 
+//    @GetMapping("/")
+//    public String index(Model model) {
+//        model.addAttribute("page", "Welcome to Landing Page");
+//        return "index";
+//    }
+
+
     @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("page", "Welcome to Landing Page");
-        return "index";
+    public String getBlogList (
+            @RequestParam(value = "search", required = false) String keyword,
+            @RequestParam(value = "start", required = false) Integer start,
+            @RequestParam(value = "limit", required = false) Integer limit,
+            Model model
+    ) {
+        List<Post> thePosts;
+        if(keyword==null){
+            thePosts = new PostService().findAll(postRepository);
+        }else{
+            try{
+                thePosts = postRepository.findByKeyword(keyword);
+            }catch (Exception e){
+                thePosts = new PostService().findAll(postRepository);
+            }
+        }
+        model.addAttribute("posts_list", thePosts);
+        return "post/posts_list";
     }
+
+
 
 //    //blog list to include tag
 //    @GetMapping("includetag")
@@ -69,20 +93,7 @@ public class HomeController {
         return "welcome";
     }
 
-    @GetMapping("/blogslist")
-    public String getBlogList (
-            @RequestParam(value = "search", required = false) String keyword,
-            Model model
-    ) {
-        List<Post> thePosts;
-        if(keyword==null){
-            thePosts = new PostService().findAll(postRepository);
-        }else{
-            thePosts = postRepository.findByKeyword(keyword);
-        }
-        model.addAttribute("posts_list", thePosts);
-        return "post/posts_list";
-    }
+
 
 
 
