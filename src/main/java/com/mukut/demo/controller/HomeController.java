@@ -68,7 +68,25 @@ public class HomeController {
             @RequestParam("postId") int postId
     ) {
         postRepository.deleteById(postId);
-        return "redirect:/"; //eturn "redirect:/showBlogPost?postId="+comment.getPostId();
+        return "redirect:/";
+    }
+
+    @GetMapping("/updateBlogPost")
+    public String updateBlogPost(
+            @RequestParam("postId") int postId,
+            Model model
+    ) {
+        Post post = postRepository.getById(postId);
+        model.addAttribute("post", post);
+        return "post/update_post";
+    }
+
+    @PostMapping("post_updated")
+    public String postUpdate(
+            @ModelAttribute Post post
+    ){
+        new PostService().save(postRepository, post);
+        return "redirect:/";
     }
 
 

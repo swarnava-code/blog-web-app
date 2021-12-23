@@ -24,7 +24,7 @@
     <div class="form-group-option">
         <div class="form-group-input">
             <form th:action="@{/}">
-                <input type="text" th:name="search"/>
+                <input type="text" th:name="search" placeholder="Search Something!!!"/>
                 <input type="submit"/>
             </form>
 
@@ -46,6 +46,9 @@
             <option value="opensource">Open Source</option>
         </select>
 
+        <form action="newpost" method="get">
+            <button type="submit">Create New Blog Post</button>
+        </form>
 
     </div>
 
@@ -86,7 +89,7 @@
             </a>
             <a th:href="@{/deleteBlogPost(postId=${post.id})}"
                class="btn btn-danger btn-sm"
-               onclick="if (!(confirm('Are you sure you want to delete this employee?'))) return false">
+               onclick="if (!(confirm('Are you sure you want to delete this post?'))) return false">
                 Delete
             </a>
         </td>

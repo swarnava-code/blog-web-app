@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <title>Update Post</title>
+    <style>
+    body{
+    margin:20px;
+    padding:20px;
+    }
+    td, th{
+    margin:5px;
+    padding:5px;
+    }
+    </style>
+</head>
+<body>
+<center>
+    <form action="post_updated" method="post" th:object="${post}">
+        <input type="hidden" name="id" th:value="${post.id}"  /><br>
+        <input type="text" name="title" placeholder="Enter Title" th:value="${post.title}" /><br>
+        <input type="text" name="content" placeholder="Enter Content" th:value="${post.content}" /><br>
+        <input type="text" name="author" placeholder="Enter Author name" th:value="${post.author}" /><br>
+        <button type="submit">Submit</button>
+    </form>
+</center>
+</body>
+</html>
