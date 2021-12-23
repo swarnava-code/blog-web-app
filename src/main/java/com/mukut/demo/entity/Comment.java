@@ -5,13 +5,6 @@ import javax.persistence.*;
 @Entity
 @Table(name="comments")
 public class Comment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private int id;
-
-    @Column(name="post_id")
-    private int postId;
 
     @Column(name="name")
     private String name;
@@ -21,6 +14,14 @@ public class Comment {
 
     @Column(name="comment")
     private String comment;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name="post_id")
+    private int postId;
 
     @Column(name="created_at")
     private String createdAt;

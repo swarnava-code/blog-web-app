@@ -77,7 +77,7 @@ public class HomeController {
 
         List<Post> thePosts = new PostService().findAll(postRepository);
         model1.addAttribute("posts_list", thePosts);
-        
+
         return "post/posts_list";
     }
 
@@ -85,7 +85,7 @@ public class HomeController {
 
     @GetMapping("/register")
     public String index(){
-        return "users/register";
+        return "user/register";
     }
 
     @PostMapping("/register_done")
@@ -113,8 +113,9 @@ public class HomeController {
     @GetMapping("/showBlogPost")
     public String showBlogPost(
             @RequestParam("postId") int postId,
-            Model model1,
-            Model model2
+            Model postModel,
+            Model tagModel,
+            Model commentModel
     ) {
         Post post = null;
         try{
@@ -122,95 +123,27 @@ public class HomeController {
         }catch (Exception e){
             e.printStackTrace();
         }
-        List<Tag> tagList = new TagService().findByPostId(tagRepository, postId); //tagRepository.findByPostId(postId);
-        System.out.println(tagList);
+        postModel.addAttribute("post", post);
 
-        model1.addAttribute("post", post);
-        model2.addAttribute("tags", tagList);
+        List<Tag> tagList = new TagService().findByPostId(tagRepository, postId);
+        tagModel.addAttribute("tags", tagList);
 
-        System.out.println("\n\n\n\n\n\n\n\ncontent: "+post.toString()+"\n\n\n\n\n\n\n\n");
+        List<Comment> commentList = new CommentService().findByPostId(commentRepository, postId);
+        commentModel.addAttribute("comments", commentList);
 
         return "post/show_post";
     }
 
-
-
-
-
-
-
-
-
-
-
-    @PostMapping("/comments")
+    @PostMapping("/comments_submitted")
     public String comments(
-            @ModelAttribute Comment comment,
+            @ModelAttribute("comments") Comment comment,
             Model model
     ) {
+        System.out.println("\n\ngettingFromHTMLForm:\n"+comment+"\n\n");
+        Comment comment_inserted = new CommentService().save(commentRepository ,comment);
+        model.addAttribute("message", comment.getName()+ ", Your comment submitted.");
 
-        List<Post> thePosts = new TagService().findAll(postRepository);
-        model.addAttribute("posts_list", thePosts);
-        //model.addAttribute("user5", postsRepository.findById(5).toString());
-        return "post/posts_list";
-
-
-//
-//        model.addAttribute("message", comment.getName()+", your comment posted.\n");
-//        System.out.println(comment.toString());
-//        return "welcome";
-
-
-        // Comment commentInserted = new CommentService().save(commentRepository, comment);
-        //return "post/posts_list";  //showBlogPost?postId=31
+        return "welcome";
     }
-
-
-//        Post postInserted = new PostService().save(postRepository, posts);
-//        new TagService().saveEachTag(tagRepository, tags, postInserted.getId(), postInserted.getCreated_at(), postInserted.getUpdated_at());
-//        model.addAttribute("heading_message", "Your blog successfully submitted");
-//        model.addAttribute("message", "Your post, '"+postInserted.getTitle()+"' with the tag : ("+tags+") successfully posted.\n");
-//
-//
-
-    //####################################update
-//    @PostMapping("/update")
-//    public String updateTest(
-//            @ModelAttribute User user,
-//            Model model
-//    ) {
-//        mo
-//        userRepository.save();
-//        User userDetails = new UserService().save(userRepository ,user);
-//        model.addAttribute("message", userDetails.getFname()+" inserted.\n");
-//        return "welcome";
-//    }
-
-    //################################################# practice to use service
-
-//
-//    //UserRepository userRepository2 =
-//    UserServiceImpl userService = new UserServiceImpl();
-//
-////    @Autowired
-////    public HomeController (UserServiceImpl theEmployeeService) {
-////        userService = theEmployeeService;
-////    }
-//
-//    @GetMapping("/register123")
-//    public String testkj(){
-//        return "users/register";
-//    }
-//
-//    @PostMapping("/test123")
-//    public String saveEmployee(@ModelAttribute("users") User theUser, Model model) {
-//
-//        // save the employee
-//        userService.save(theUser);
-//
-//        model.addAttribute("message", " inserted.\n");
-//        return "welcome";
-//
-//    }
 
 }
