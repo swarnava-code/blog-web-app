@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="posts")
-public class Posts {
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,6 +35,17 @@ public class Posts {
     @Column(name = "updated_at")
     String updated_at;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public boolean isIs_published() {
+        return is_published;
+    }
 
     @Override
     public String toString() {

@@ -1,10 +1,12 @@
 package com.mukut.demo.controller;
 
-import com.mukut.demo.entity.Posts;
+import com.mukut.demo.entity.Post;
 import com.mukut.demo.entity.User;
-import com.mukut.demo.repo.PostsRepository;
+import com.mukut.demo.repo.PostRepository;
+import com.mukut.demo.repo.TagRepository;
 import com.mukut.demo.repo.UserRepository;
 import com.mukut.demo.service.PostService;
+import com.mukut.demo.service.TagService;
 import com.mukut.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,8 +22,10 @@ public class HomeController {
     public UserRepository userRepository ;
 
     @Autowired
-    private PostsRepository postsRepository;
+    private PostRepository postRepository;
 
+    @Autowired
+    private TagRepository tagRepository;
 
     @GetMapping("/")
     public String index(Model model) {
@@ -29,24 +33,32 @@ public class HomeController {
         return "index";
     }
 
-
+//    //blog list to include tag
+//    @GetMapping("includetag")
+//    public String includeTag(Model model) {
+//        model.addAttribute("page", "Welcome to Landing Page");
+//        return "index";
+//    }
 
     //################################################# for POST
 
-
     @GetMapping("/newpost")
     public String newpost(){
-        return "posts/newpost";
+        return "post/newpost";
     }
+
+
 
     @PostMapping("/newpost_submitted")
     public String newpost_submit(
-            @ModelAttribute Posts posts,
+            @ModelAttribute Post posts,
+            @RequestParam("tags") String tags,
             Model model
     ) {
-        Posts post_inserted = new PostService().save(postsRepository, posts);
+        Post postInserted = new PostService().save(postRepository, posts);
+        new TagService().saveEachTag(tagRepository, tags, postInserted.getId(), postInserted.getCreated_at(), postInserted.getUpdated_at());
         model.addAttribute("heading_message", "Your blog successfully submitted");
-        model.addAttribute("message", post_inserted.getTitle()+" successfully posted.\n");
+        model.addAttribute("message", "Your post, '"+postInserted.getTitle()+"' with the tag : ("+tags+") successfully posted.\n");
         return "welcome";
     }
 
@@ -54,10 +66,10 @@ public class HomeController {
     public String getPostList (
             Model model
     ) {
-        List<Posts> thePosts = new PostService().findAll(postsRepository);
+        List<Post> thePosts = new PostService().findAll(postRepository);
         model.addAttribute("posts_list", thePosts);
         //model.addAttribute("user5", postsRepository.findById(5).toString());
-        return "posts/posts_list";
+        return "post/posts_list";
     }
 
     //################################################# for user
@@ -87,11 +99,10 @@ public class HomeController {
         model.addAttribute("users_list", theUsers);
         model.addAttribute("user5", userRepository.findById(5).toString());
 
-        return "users/users_list";
+        return "user/users_list";
     }
 
     //####################################update
-
 //    @PostMapping("/update")
 //    public String updateTest(
 //            @ModelAttribute User user,
@@ -105,8 +116,6 @@ public class HomeController {
 //    }
 
     //################################################# practice to use service
-
-
 
 //
 //    //UserRepository userRepository2 =
@@ -132,6 +141,5 @@ public class HomeController {
 //        return "welcome";
 //
 //    }
-
 
 }
