@@ -57,10 +57,6 @@
             </form>
         </div>
 
-
-
-
-
         <label>Sort by</label>
         <select name="sort" id="sort">
             <option value="publishedAt">Published Date & Time</option>
@@ -116,6 +112,23 @@
     </tr>
     </tbody>
 </table>
+
+<br><br>
+<form th:action="@{/}">
+    <input type="hidden" th:name="start" value="0"/>
+    <input type="hidden" th:name="limit" value="3"/>
+    <input type="submit" value="1"/>
+</form>
+<form th:action="@{/}">
+    <input type="hidden" th:name="start" value="3"/>
+    <input type="hidden" th:name="limit" value="3"/>
+    <input type="submit" value="2"/>
+</form>
+<form th:action="@{/}">
+    <input type="hidden" th:name="start" value="6"/>
+    <input type="hidden" th:name="limit" value="3"/>
+    <input type="submit" value="3"/>
+</form>
 
 </body>
 </html>

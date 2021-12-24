@@ -11,11 +11,15 @@ import java.util.Set;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
-
+//SELECT * FROM posts LIMIT 10 OFFSET 20
     @Query(value = "select * from posts s where s.title like %:keyword% or s.author like %:keyword% or s.content like %:keyword% order by s.published_at", nativeQuery = true)
     Set<Post> findByKeyword(@Param("keyword") String keyword);
 
     @Query(value = "select * from posts s where s.author like %:keyword% order by s.published_at", nativeQuery = true)
     Set<Post> findByAuthor(@Param("keyword") String keyword);
+
+    @Query(value = "select * from posts s order by s.published_at limit :limitNo offset :offsetNo", nativeQuery = true)
+    Set<Post> pagination(@Param("limitNo") Integer limitNo, @Param("offsetNo") Integer offsetNo);
+
 
 }

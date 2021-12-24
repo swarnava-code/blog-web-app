@@ -50,52 +50,58 @@ public class HomeController {
         Set<Post> postByTags = null; //filter
         Set<Post> postByAuthor = null; //filter
         Set<Post> postByPubDate = null; //filter
-        Set<Post> mergedSet = new HashSet<>();//merge result // merge every result at the end
+        Set<Post> mergedSet = new HashSet<>(); //merge result
         thePosts = new PostService().findAll(postRepository);
 
         if (keyword!=null && keyword.length()>1) {
-            System.out.println("keyword\n\n");
             postByKeywordSearch = postRepository.findByKeyword(keyword);
+            mergedSet.addAll(searchTag(keyword));
         }
         if (author!=null && author.length()>1 && (!author.equals("all"))) {
-            System.out.println("author\n\n");
             postByAuthor = postRepository.findByAuthor(author);
         }
-        
+        System.out.println(start+" : "+limit);
+
+        if ( (start!=null && limit!=null) ) {
+            System.out.println(start+" : "+limit);
+            //postRepository.pagination(start, limit);
+            mergedSet.addAll(postRepository.pagination(limit, start));
+        }
+
         if (tag!=null && tag.length()>1 && (!tag.equals("all"))) {
-            List<Tag> tags = tagRepository.findByTag(tag);
-            Set<Post> tagSet = new LinkedHashSet<>();
-            for (Tag eachTag: tags) {
-                Optional<Post> optionalPost = postRepository.findById(eachTag.getPostId());
-                if(!optionalPost.isEmpty()){
-                    System.out.println("\n6\n");
-                    if(optionalPost.get()!=null)
-                        tagSet.add(optionalPost.get());
-                }
-            }
-            mergedSet.addAll(tagSet);
+            mergedSet.addAll(searchTag(tag));
         }
 
         if(postByAuthor!=null){
-            System.out.println("postByAuthor!=null\n\n");
             mergedSet.addAll(postByAuthor);
         }
         if(postByKeywordSearch!=null){
-            System.out.println("postByKeywordSearch!=null\n\n");
             mergedSet.addAll(postByKeywordSearch);
         }
 
         if (mergedSet.isEmpty()){
-            System.out.println("mergedSet is empty\n\n");
             model.addAttribute("posts_list", thePosts);
         }
         else{
-            System.out.println("mergedSet != null\n\n");
             model.addAttribute("posts_list", mergedSet);
         }
-
         return "post/posts_list";
     }
+
+    public Set<Post> searchTag(String tag){
+        List<Tag> tags = tagRepository.findByTag(tag);
+        Set<Post> tagSet = new LinkedHashSet<>();
+        for (Tag eachTag: tags) {
+            Optional<Post> optionalPost = postRepository.findById(eachTag.getPostId());
+            if(!optionalPost.isEmpty()){
+                System.out.println("\n6\n");
+                if(optionalPost.get()!=null)
+                    tagSet.add(optionalPost.get());
+            }
+        }
+        return tagSet;
+    }
+
 
     @GetMapping("/deleteBlogPost")
     public String deleteBlogPost(
