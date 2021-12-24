@@ -8,12 +8,12 @@
     <title>Post</title>
     <style>
     body{
-    margin:20px;
-    padding:20px;
+        margin:20px;
+        padding:20px;
     }
     td, th{
-    margin:5px;
-    padding:5px;
+        margin:5px;
+        padding:5px;
     }
     </style>
 </head>
@@ -30,10 +30,7 @@
           <story th:text="${post.content}">Before starting IoC, it is important to know what is Loosely Coupling Components. Loosely Coupling Components are weakly associated with…</story>
       </div>
 <br>
-
-
       <br><br><hr>
-
       <table>
           <thead>
           <tr>
@@ -49,9 +46,7 @@
           </tr>
           </tbody>
       </table>
-
       <br><br><hr>
-
       <table>
           <thead>
           <tr>
@@ -85,9 +80,7 @@
           </tr>
           </tbody>
       </table>
-
       <br><br><hr>
-
       <h3>Enter your comment here</h3><br>
       <form action="comments_submitted" method="post" th:object="${comments}">
           <!-- take id from post and include into post_id of comment object-->

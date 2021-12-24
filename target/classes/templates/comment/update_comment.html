@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <title>Update Post</title>
+    <style>
+    body{
+    margin:20px;
+    padding:20px;
+    }
+    td, th{
+    margin:5px;
+    padding:5px;
+    }
+    </style>
+</head>
+<body>
+<center>
+    <form th:action="@{/showBlogPost/comment_updated}" method="post" th:object="${comment}">
+        <input type="hidden" th:name="id" th:value="${comment.id}" /><br>
+        <input type="text" th:name="comment" placeholder="Enter Comment" th:value="${comment.comment}" /><br>
+        <br><input type="submit"/><br>
+    </form>
+
+</center>
+</body>
+</html>

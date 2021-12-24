@@ -17,6 +17,12 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    public Comment update(CommentRepository commentRepository, Comment comment){
+        String timestamp = new HelperService().makeDataAndTime();
+        comment.setUpdatedAt(timestamp);
+        return commentRepository.save(comment);
+    }
+
     public List<Comment> findByPostId(CommentRepository commentRepository, Integer postId){
         return commentRepository.findByPostId(postId);
     }

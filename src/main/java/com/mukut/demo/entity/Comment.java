@@ -29,18 +29,7 @@ public class Comment {
     @Column(name="updated_at")
     private String  updatedAt;
 
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "id=" + id +
-                ", postId=" + postId +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", comment='" + comment + '\'' +
-                ", createdAt='" + createdAt + '\'' +
-                ", updatedAt='" + updatedAt + '\'' +
-                '}';
-    }
+
 
     public int getId() {
         return id;
@@ -96,5 +85,18 @@ public class Comment {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", postId=" + postId +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", comment='" + comment + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                '}';
     }
 }

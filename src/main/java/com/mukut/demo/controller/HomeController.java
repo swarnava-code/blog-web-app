@@ -89,6 +89,13 @@ public class HomeController {
         model.addAttribute("post", post);
         return "post/update_post";
     }
+    @PostMapping("post_updated")
+    public String postUpdate(
+            @ModelAttribute Post post
+    ){
+        new PostService().save(postRepository, post);
+        return "redirect:/";
+    }
 
     @GetMapping("/showBlogPost/deleteComment")
     public String deleteComment(
@@ -101,35 +108,28 @@ public class HomeController {
 
     @GetMapping("/showBlogPost/updateComment")
     public String updateComment(
-            @RequestParam("postId") int postId,
-            @RequestParam("id") int id,
+            @RequestParam("id") int commentId,
             Model model
     ) {
-        Post post = postRepository.getById(id);
-        model.addAttribute("post", post);
-        return "post/update_post";
+        Optional<Comment> optional = commentRepository.findById(commentId);
+        Comment comment = optional.get();
+        model.addAttribute("comment" ,comment);
+        return "comment/update_comment";
     }
 
-
-
-    @PostMapping("post_updated")
-    public String postUpdate(
-            @ModelAttribute Post post
-    ){
-        new PostService().save(postRepository, post);
-        return "redirect:/";
+    @PostMapping("showBlogPost/comment_updated")
+    public String commentUpdated(
+            @RequestParam(value = "id", required = false) Integer commentId,
+            @RequestParam(value = "comment", required = false) String commentMsg
+    ) {
+        Optional<Comment> optional = commentRepository.findById(commentId);
+        Comment comment = optional.get();
+        comment.setComment(commentMsg);
+        comment.setId(commentId);
+        int postId = comment.getPostId();
+        Comment commentInserted = new CommentService().update(commentRepository ,comment);
+        return "redirect:/showBlogPost?postId="+postId;
     }
-
-
-
-//    //blog list to include tag
-//    @GetMapping("includetag")
-//    public String includeTag(Model model) {
-//        model.addAttribute("page", "Welcome to Landing Page");
-//        return "index";
-//    }
-
-    //################################################# for POST
 
     @GetMapping("/newpost")
     public String newpost(){
