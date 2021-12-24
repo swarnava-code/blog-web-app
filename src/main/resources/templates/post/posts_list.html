@@ -17,30 +17,53 @@
     </style>
 </head>
 <body>
-
-
-<hr/>
+<form action="\" method="get">
+    <input type="submit" value="🏠"/>
+</form>
 <div class="nav">
     <div class="form-group-option">
         <div class="form-group-input">
             <form th:action="@{/}">
                 <input type="text" th:name="search" placeholder="Search Something!!!"/>
+                <div class="form-group-input">
+                    <label>Filter : </label>
+                    <label> Author</label>
+                    <select th:name="author" id="author">
+                        <option value="all">All</option>
+                        <option value="Unknown User">Unknown User</option>
+                        <option value="Swarnava Chakraborty">Swarnava Chakraborty</option>
+                        <option value="Dhritimoy Majumder">Dhritimoy Majumder</option>
+                        <option value="Guddu Ghosh">Guddu Ghosh</option>
+                    </select>
+                    <label style="display:none"> Published Year</label>
+                    <select style="display:none" th:name="publishedAt" id="published_at">
+                        <option value="1">All</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                    </select>
+                    <label> Tag</label>
+                    <select th:name="tags" id="tags">
+                        <option value="all">All</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Lifestyle">Lifestyle</option>
+                        <option value="Motivation">Motivation</option>
+                    </select>
+                </div>
+
+
+
+
                 <input type="submit"/>
             </form>
         </div>
-        <select name="filter" id="filter">
-            <option value="challenges">Filter</option>
-            <option value="projects">Projects</option>
-            <option value="community">Community</option>
-            <option value="opensource">Open Source</option>
-        </select>
 
 
+
+
+
+        <label>Sort by</label>
         <select name="sort" id="sort">
-            <option value="challenges">Sort</option>
-            <option value="projects">Projects</option>
-            <option value="community">Community</option>
-            <option value="opensource">Open Source</option>
+            <option value="publishedAt">Published Date & Time</option>
         </select>
 
         <form action="newpost" method="get">

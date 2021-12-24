@@ -18,8 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.HTML;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class HomeController {
@@ -36,39 +35,65 @@ public class HomeController {
     @Autowired
     private CommentRepository commentRepository;
 
-//    @GetMapping("/")
-//    public String index(Model model) {
-//        model.addAttribute("page", "Welcome to Landing Page");
-//        return "index";
-//    }
-
-
     @GetMapping("/")
     public String getBlogList (
             @RequestParam(value = "search", required = false) String keyword,
             @RequestParam(value = "start", required = false) Integer start,
             @RequestParam(value = "limit", required = false) Integer limit,
+            @RequestParam(value = "author", required = false) String author,
+            @RequestParam(value = "publishedAt", required = false) Integer publishedAt,
+            @RequestParam(value = "tags", required = false) String tag,
             Model model
     ) {
-        List<Post> thePosts;
-        if(keyword==null) {
-            thePosts = new PostService().findAll(postRepository);
-        } else {
-            thePosts = postRepository.findByKeyword(keyword);
-//            List<Tag> tagList = tagRepository.findByTag(keyword);
-//            for(Tag tag : tagList){
-//                if(!thePosts.contains(tag.getPostId())){
-//                    int postId = tag.getPostId();
-//                    // postRepository.findById(postId);
-//                    //thePosts.add();
-//                    Optional<Post> postResult = postRepository.findById(postId);
-//                    for(Post post: postResult) {
-//
-//                    }
-//                }
-//            }
+        List<Post> thePosts = null;
+        Set<Post> postByKeywordSearch = null;
+        Set<Post> postByTags = null; //filter
+        Set<Post> postByAuthor = null; //filter
+        Set<Post> postByPubDate = null; //filter
+        Set<Post> mergedSet = new HashSet<>();//merge result // merge every result at the end
+        thePosts = new PostService().findAll(postRepository);
+
+        if (keyword!=null && keyword.length()>1) {
+            System.out.println("keyword\n\n");
+            postByKeywordSearch = postRepository.findByKeyword(keyword);
         }
-        model.addAttribute("posts_list", thePosts);
+        if (author!=null && author.length()>1 && (!author.equals("all"))) {
+            System.out.println("author\n\n");
+            postByAuthor = postRepository.findByAuthor(author);
+        }
+        
+        if (tag!=null && tag.length()>1 && (!tag.equals("all"))) {
+            List<Tag> tags = tagRepository.findByTag(tag);
+            Set<Post> tagSet = new LinkedHashSet<>();
+            for (Tag eachTag: tags) {
+                Optional<Post> optionalPost = postRepository.findById(eachTag.getPostId());
+                if(!optionalPost.isEmpty()){
+                    System.out.println("\n6\n");
+                    if(optionalPost.get()!=null)
+                        tagSet.add(optionalPost.get());
+                }
+            }
+            mergedSet.addAll(tagSet);
+        }
+
+        if(postByAuthor!=null){
+            System.out.println("postByAuthor!=null\n\n");
+            mergedSet.addAll(postByAuthor);
+        }
+        if(postByKeywordSearch!=null){
+            System.out.println("postByKeywordSearch!=null\n\n");
+            mergedSet.addAll(postByKeywordSearch);
+        }
+
+        if (mergedSet.isEmpty()){
+            System.out.println("mergedSet is empty\n\n");
+            model.addAttribute("posts_list", thePosts);
+        }
+        else{
+            System.out.println("mergedSet != null\n\n");
+            model.addAttribute("posts_list", mergedSet);
+        }
+
         return "post/posts_list";
     }
 

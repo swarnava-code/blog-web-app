@@ -7,10 +7,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
-    //Custom query
-    @Query(value = "select * from posts s where s.title like %:keyword% or s.author like %:keyword% or s.content like %:keyword%", nativeQuery = true)
-    List<Post> findByKeyword(@Param("keyword") String keyword);
+
+    @Query(value = "select * from posts s where s.title like %:keyword% or s.author like %:keyword% or s.content like %:keyword% order by s.published_at", nativeQuery = true)
+    Set<Post> findByKeyword(@Param("keyword") String keyword);
+
+    @Query(value = "select * from posts s where s.author like %:keyword% order by s.published_at", nativeQuery = true)
+    Set<Post> findByAuthor(@Param("keyword") String keyword);
+
 }

@@ -8,11 +8,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Integer> {
-    List<Tag> findByPostId(Integer postId);
+    @Query(value = "select * from tags s where s.name like %:tag%", nativeQuery = true)
+    List<Tag> findByTag(@Param("tag") String tag);
 
-    @Query(value = "select * from tags s where s.tags like %:keyword%", nativeQuery = true)
-    List<Tag> findByTag(@Param("keyword") String keyword);
+    List<Tag> findByPostId(Integer postId);
 }

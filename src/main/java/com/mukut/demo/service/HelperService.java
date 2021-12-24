@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 public class HelperService {
     public static String makeDataAndTime() {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/mm/yyyy HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/mm/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         return dateTimeFormatter.format(now);
     }
