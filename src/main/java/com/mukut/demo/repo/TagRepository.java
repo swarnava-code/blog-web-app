@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Integer> {
-    @Query(value = "select * from tags s where s.name like %:tag%", nativeQuery = true)
+    @Query(value = "select * from tags s where lower(s.name) like  lower(concat('%', :tag,'%'))", nativeQuery = true)
     List<Tag> findByTag(@Param("tag") String tag);
 
     List<Tag> findByPostId(Integer postId);

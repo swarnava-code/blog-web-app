@@ -24,35 +24,19 @@
     <div class="form-group-option">
         <div class="form-group-input">
             <form th:action="@{/}">
-                <input type="text" th:name="search" placeholder="Search Something!!!"/>
+                <input type="text" th:name="search" placeholder="Search Something!!!" />
                 <div class="form-group-input">
-                    <label>Filter : </label>
-                    <label> Author</label>
-                    <select th:name="author" id="author">
-                        <option value="all">All</option>
-                        <option value="Unknown User">Unknown User</option>
-                        <option value="Swarnava Chakraborty">Swarnava Chakraborty</option>
-                        <option value="Dhritimoy Majumder">Dhritimoy Majumder</option>
-                        <option value="Guddu Ghosh">Guddu Ghosh</option>
-                    </select>
-                    <label style="display:none"> Published Year</label>
-                    <select style="display:none" th:name="publishedAt" id="published_at">
-                        <option value="1">All</option>
-                        <option value="2021">2021</option>
-                        <option value="2020">2020</option>
-                    </select>
-                    <label> Tag</label>
-                    <select th:name="tags" id="tags">
-                        <option value="all">All</option>
-                        <option value="Technology">Technology</option>
-                        <option value="Lifestyle">Lifestyle</option>
-                        <option value="Motivation">Motivation</option>
-                    </select>
+                    Filter by tag :<br>
+                    <input type="checkbox" name="author" value="swarnava">Swarnava Chakraborty
+                    <input type="checkbox" name="author" value="dhritimoy">Dhritimoy Majumder
+                    <input type="checkbox" name="author" value="kalaiya">Kalaiya Rasan
+                    <input type="checkbox" name="author" value="guddu">Guddu Ostad
+                    <br>Filter by tag :<br>
+                    <input type="checkbox" name="tag" value="technology">Technology
+                    <input type="checkbox" name="tag" value="lifestyle">Lifestyle
+                    <input type="checkbox" name="tag" value="motivation">Motivation
+                    <input type="checkbox" name="tag" value="politics">Politics
                 </div>
-
-
-
-
                 <input type="submit"/>
             </form>
         </div>
@@ -68,12 +52,9 @@
 
     </div>
 
-
 </div>
 
 <br>
-
-
 
 <table>
     <thead>
@@ -114,21 +95,19 @@
 </table>
 
 <br><br>
-<form th:action="@{/}">
-    <input type="hidden" th:name="start" value="0"/>
-    <input type="hidden" th:name="limit" value="3"/>
-    <input type="submit" value="1"/>
-</form>
-<form th:action="@{/}">
-    <input type="hidden" th:name="start" value="3"/>
-    <input type="hidden" th:name="limit" value="3"/>
-    <input type="submit" value="2"/>
-</form>
-<form th:action="@{/}">
-    <input type="hidden" th:name="start" value="6"/>
-    <input type="hidden" th:name="limit" value="3"/>
-    <input type="submit" value="3"/>
-</form>
+    <a th:href="@{/?start=0&limit=3}">1</a>
+    <a th:href="@{/?start=3&limit=3}">2</a>
+    <a th:href="@{/?start=6&limit=3}">3</a>
+<br><br>
+
+<!--<input type="text" id="myInput" oninput="myFunction()">-->
+<!--<p id="demo"></p>-->
+<!--<script>-->
+<!--function myFunction() {-->
+<!--  var x = document.getElementById("myInput").value;-->
+<!--  document.getElementById("demo").innerHTML = "You wrote: " + x;-->
+<!--}-->
+<!--</script>-->
 
 </body>
 </html>

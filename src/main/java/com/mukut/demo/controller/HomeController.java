@@ -33,6 +33,18 @@ public class HomeController {
     @Autowired
     private CommentRepository commentRepository;
 
+
+    @GetMapping("/test")
+    public String test(
+            @RequestParam(value = "author", required = false) String author,
+            @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "v3", required = false) String v3
+    ){
+        System.out.println(author+"-"+tag+"-"+v3);
+        return "redirect:/";
+    }
+
+
     @GetMapping("/")
     public String getBlogList (
             @RequestParam(value = "search", required = false) String keyword,
@@ -40,7 +52,7 @@ public class HomeController {
             @RequestParam(value = "limit", required = false) Integer limit,
             @RequestParam(value = "author", required = false) String author,
             @RequestParam(value = "publishedAt", required = false) Integer publishedAt,
-            @RequestParam(value = "tags", required = false) String tag,
+            @RequestParam(value = "tag", required = false) String tag,
             Model model
     ) {
         List<Post> thePosts = null;
@@ -58,15 +70,13 @@ public class HomeController {
         if (author!=null && author.length()>1 && (!author.equals("all"))) {
             List<String> authorList = new HelperService().makeListFromCSV(author);
             for(String authorName: authorList){
+                System.out.println("'"+authorName+"'");
                 postByAuthor = postRepository.findByAuthor(authorName);
                 mergedSet.addAll(postByAuthor);
             }
         }
-        System.out.println(start+" : "+limit);
 
         if ( (start!=null && limit!=null) ) {
-            System.out.println(start+" : "+limit);
-            //postRepository.pagination(start, limit);
             mergedSet.addAll(postRepository.pagination(limit, start));
         }
 
@@ -93,13 +103,14 @@ public class HomeController {
         return "post/posts_list";
     }
 
+
+
     public Set<Post> searchTag(String tag){
         List<Tag> tags = tagRepository.findByTag(tag);
         Set<Post> tagSet = new LinkedHashSet<>();
         for (Tag eachTag: tags) {
             Optional<Post> optionalPost = postRepository.findById(eachTag.getPostId());
             if(!optionalPost.isEmpty()){
-                System.out.println("\n6\n");
                 if(optionalPost.get()!=null)
                     tagSet.add(optionalPost.get());
             }
@@ -248,7 +259,6 @@ public class HomeController {
     public String comments(
             @ModelAttribute("comments") Comment comment
     ) {
-        System.out.println("\n\ngettingFromHTMLForm:\n"+comment+"\n\n");
         Comment comment_inserted = new CommentService().save(commentRepository ,comment);
         return "redirect:/showBlogPost?postId="+comment.getPostId();
     }
