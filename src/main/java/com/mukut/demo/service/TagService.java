@@ -34,4 +34,5 @@ public class TagService {
     public List<Tag> findByPostId(TagRepository tagRepository, Integer postId){
         return tagRepository.findByPostId(postId);
     }
+
 }

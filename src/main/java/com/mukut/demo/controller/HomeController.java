@@ -8,16 +8,14 @@ import com.mukut.demo.repo.CommentRepository;
 import com.mukut.demo.repo.PostRepository;
 import com.mukut.demo.repo.TagRepository;
 import com.mukut.demo.repo.UserRepository;
-import com.mukut.demo.service.CommentService;
-import com.mukut.demo.service.PostService;
-import com.mukut.demo.service.TagService;
-import com.mukut.demo.service.UserService;
+import com.mukut.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.HTML;
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Controller
@@ -58,7 +56,11 @@ public class HomeController {
             mergedSet.addAll(searchTag(keyword));
         }
         if (author!=null && author.length()>1 && (!author.equals("all"))) {
-            postByAuthor = postRepository.findByAuthor(author);
+            List<String> authorList = new HelperService().makeListFromCSV(author);
+            for(String authorName: authorList){
+                postByAuthor = postRepository.findByAuthor(authorName);
+                mergedSet.addAll(postByAuthor);
+            }
         }
         System.out.println(start+" : "+limit);
 
@@ -69,7 +71,10 @@ public class HomeController {
         }
 
         if (tag!=null && tag.length()>1 && (!tag.equals("all"))) {
-            mergedSet.addAll(searchTag(tag));
+            List<String> tagList = new HelperService().makeListFromCSV(tag);
+            for(String tagName: tagList){
+                mergedSet.addAll(searchTag(tagName));
+            }
         }
 
         if(postByAuthor!=null){
@@ -111,12 +116,15 @@ public class HomeController {
         return "redirect:/";
     }
 
+    PostService postService = new PostService();
+
     @GetMapping("/updateBlogPost")
     public String updateBlogPost(
             @RequestParam("postId") int postId,
             Model model
     ) {
-        Post post = postRepository.getById(postId);
+        Post post = postService.findPostById(postRepository ,postId);
+        //Post post = postRepository.getById(postId);
         model.addAttribute("post", post);
         return "post/update_post";
     }
@@ -171,14 +179,11 @@ public class HomeController {
     @PostMapping("/newpost_submitted")
     public String newpost_submit(
             @ModelAttribute Post posts,
-            @RequestParam("tags") String tags,
-            Model model
+            @RequestParam("tags") String tags
     ) {
         Post postInserted = new PostService().save(postRepository, posts);
         new TagService().saveEachTag(tagRepository, tags, postInserted.getId(), postInserted.getCreated_at(), postInserted.getUpdated_at());
-        model.addAttribute("heading_message", "Your blog successfully submitted");
-        model.addAttribute("message", "Your post, '"+postInserted.getTitle()+"' with the tag : ("+tags+") successfully posted.\n");
-        return "welcome";
+        return "redirect:/";
     }
 
 

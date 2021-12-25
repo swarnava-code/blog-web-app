@@ -17,6 +17,7 @@ public class Post {
     @Column(name = "excerpt")
     private String excerpt;
 
+    //@Lob
     @Column(name = "content")
     private String content;
 

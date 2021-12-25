@@ -3,6 +3,8 @@ package com.mukut.demo.service;
 import com.mukut.demo.entity.Post;
 import com.mukut.demo.repo.PostRepository;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +26,7 @@ public class PostService {
         return postsRepository.findAll();
     }
 
+    @Transactional
     public Post findPostById(PostRepository postRepository, int id){
         Optional<Post> optionalResult = postRepository.findById(id);
         Post post = null;

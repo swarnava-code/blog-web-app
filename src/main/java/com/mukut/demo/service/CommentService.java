@@ -1,11 +1,8 @@
 package com.mukut.demo.service;
 
 import com.mukut.demo.entity.Comment;
-import com.mukut.demo.entity.Tag;
 import com.mukut.demo.repo.CommentRepository;
-import com.mukut.demo.repo.TagRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
