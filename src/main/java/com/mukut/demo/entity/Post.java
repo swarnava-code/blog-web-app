@@ -1,6 +1,7 @@
 package com.mukut.demo.entity;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 
 @Entity
 @Table(name="posts")
@@ -126,4 +127,5 @@ public class Post {
     public String getUpdated_at() {
         return updated_at;
     }
+
 }

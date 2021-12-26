@@ -1,7 +1,5 @@
 package com.mukut.demo.model;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class Author {
     private Boolean swarnava;

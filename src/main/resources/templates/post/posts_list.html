@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <title>Posts</title>
     <style>
         body{
@@ -24,52 +25,58 @@
     <div class="form-group-option">
         <div class="form-group-input">
             <form th:action="@{/}">
-                <input type="text" th:value="${search}" th:name="search" placeholder="Search Something!!!"  />
+                <input type="text" th:value="${search}" th:name="search" placeholder="Search Something!!!"/>
                 <div class="form-group-input">
                     Filter by author :<br>
-                    <input type="checkbox" name="author" value="swarnava" th:checked="${authorsModel.getSwarnava()}" >Swarnava Chakraborty
-                    <input type="checkbox" name="author" value="dhritimoy" th:checked="${authorsModel.getDhritimoy()}" >Dhritimoy Majumder
-                    <input type="checkbox" name="author" value="kalaiya" th:checked="${authorsModel.getKalaiya()}" >Kalaiya Rasan
-                    <input type="checkbox" name="author" value="guddu" th:checked="${authorsModel.getGuddu()}" >Guddu Ghosh
+                    <input type="checkbox" name="author" value="swarnava" th:checked="${authorsModel.getSwarnava()}">Swarnava
+                    Chakraborty
+                    <input type="checkbox" name="author" value="dhritimoy" th:checked="${authorsModel.getDhritimoy()}">Dhritimoy
+                    Majumder
+                    <input type="checkbox" name="author" value="kalaiya" th:checked="${authorsModel.getKalaiya()}">Kalaiya
+                    Rasan
+                    <input type="checkbox" name="author" value="guddu" th:checked="${authorsModel.getGuddu()}">Guddu
+                    Ghosh
                     <br>Filter by tag :<br>
-                    <input type="checkbox" name="tag" value="technology" th:checked="${tagsModel.getTechnology()}" >Technology
-                    <input type="checkbox" name="tag" value="lifestyle" th:checked="${tagsModel.getLifestyle()}" >Lifestyle
+                    <input type="checkbox" name="tag" value="technology" th:checked="${tagsModel.getTechnology()}">Technology
+                    <input type="checkbox" name="tag" value="lifestyle" th:checked="${tagsModel.getLifestyle()}">Lifestyle
                     <input type="checkbox" name="tag" value="motivation" th:checked="${tagsModel.getMotivation()}">Motivation
                     <input type="checkbox" name="tag" value="politics" th:checked="${tagsModel.getPolitics()}">Politics
                     <input type="checkbox" name="tag" value="culture" th:checked="${tagsModel.getCulture()}">Culture
                 </div>
+                <label>Sort by</label>
+                <select name="sortField" id="sort">
+                    <option value="publishedAt">Published Date & Time</option>
+                    <option value="title">Title</option>
+                    <option value="author">Author</option>
+                    <option value="excerpt">Excerpt</option>
+                </select>
+                <label> Order </label>
+                <select name="order" id="order">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
                 <input type="submit"/>
             </form>
         </div>
-
-        <label>Sort by</label>
-        <select name="sort" id="sort">
-            <option value="publishedAt">Published Date & Time</option>
-        </select>
-
         <form action="newpost" method="get">
             <button type="submit">Create New Blog Post</button>
         </form>
-
     </div>
-
 </div>
-
 <br>
-
 <table>
     <thead>
     <tr>
-        <th> Title </th>
-        <th> Excerpt </th>
-        <th> Author </th>
-        <th> Published at </th>
+        <th> Title</th>
+        <th> Excerpt</th>
+        <th> Author</th>
+        <th> Published at</th>
         <th>Action</th>
     </tr>
     </thead>
     <tbody>
     <tr th:if="${posts_list.empty}">
-        <td colspan="2"> No Posts Available </td>
+        <td colspan="2"> No Posts Available</td>
     </tr>
     <tr th:each="post : ${posts_list}">
         <td><span th:text="${post.title}"> </span></td>
@@ -94,11 +101,10 @@
     </tr>
     </tbody>
 </table>
-
 <br><br>
-    <a th:href="@{/?start=0&limit=3}">1</a>
-    <a th:href="@{/?start=3&limit=3}">2</a>
-    <a th:href="@{/?start=6&limit=3}">3</a>
+<a th:href="@{/?start=0&limit=3}">1</a>
+<a th:href="@{/?start=3&limit=3}">2</a>
+<a th:href="@{/?start=6&limit=3}">3</a>
 <br><br>
 
 <!--<input type="text" id="myInput" oninput="myFunction()">-->
@@ -109,9 +115,6 @@
 <!--  document.getElementById("demo").innerHTML = "You wrote: " + x;-->
 <!--}-->
 <!--</script>-->
-
-
-
 
 
 </body>

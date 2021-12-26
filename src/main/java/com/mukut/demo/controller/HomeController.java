@@ -1,5 +1,6 @@
 package com.mukut.demo.controller;
 
+import com.mukut.demo.comparator.PostAuthorComparatorAsc;
 import com.mukut.demo.entity.Comment;
 import com.mukut.demo.entity.Post;
 import com.mukut.demo.entity.Tag;
@@ -16,8 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.HTML;
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Controller
@@ -58,7 +57,7 @@ public class HomeController {
             @RequestParam(value = "limit", required = false) Integer limit,
             @RequestParam(value = "author", required = false) String author,
             @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "publishedAt", required = false) String publishedAt,
+            @RequestParam(value = "sortField", required = false) String sortField,
             @RequestParam(value = "order", required = false) String order,
             Model model
     ) {
@@ -71,7 +70,7 @@ public class HomeController {
         thePosts = new PostService().findAll(postRepository);
 
         if (keyword!=null && keyword.replaceAll(" ","").length()!=0) {
-            postByKeywordSearch = postRepository.findByKeyword(keyword);
+            postByKeywordSearch = postRepository.findByKeyword(keyword, author, order);
             mergedSet.addAll(searchTag(keyword));
             model.addAttribute("search", keyword);
         }
@@ -82,7 +81,7 @@ public class HomeController {
             authorModel.setKalaiya(false);
             authorModel.setDhritimoy(false);
             for(String authorName: authorList){
-                postByAuthor = postRepository.findByAuthor(authorName);
+                postByAuthor = postRepository.findByAuthor(authorName, sortField, order);
                 mergedSet.addAll(postByAuthor);
                 if(authorName.equals("swarnava")){
                     authorModel.setSwarnava(true);
@@ -154,22 +153,72 @@ public class HomeController {
             mergedSet.addAll(postByKeywordSearch);
         }
 
+
+
+
+//        List<Post> sortedList = new ArrayList<>();
+//        sortedList.addAll(mergedSet);//convert set to list
+//        //sortField, order
+//        //publishedAt, excerpt, title
+//        if(sortField.equals("author")){
+//            Collections.sort(sortedList, new PostAuthorComparator());
+//        }
+//        if(sortField.equals("title")){
+//            Collections.sort(sortedList, new PostAuthorComparator());
+//        }
+//        if(sortField.equals("excerpt")){
+//            Collections.sort(sortedList, new PostAuthorComparator());
+//        }
+//        else {
+//            Collections.sort(sortedList, new PostAuthorComparator());
+//        }
+
+        Collections.sort(thePosts, new PostAuthorComparatorAsc());
+
+
+
         if (mergedSet.isEmpty()){
-            model.addAttribute("posts_list", thePosts);
+            model.addAttribute("posts_list", thePosts); //thePosts
 
         }
         else{
-            model.addAttribute("posts_list", mergedSet);
+            //model.addAttribute("posts_list", sortedList ); //mergedSet
 
         }
 
-
+//breakIntoSubList(mergedSet, start, limit)
 
 
 
         model.addAttribute("authorsModel", authorModel);
         model.addAttribute("tagsModel", tagsModel);
         return "post/posts_list";
+    }
+
+    public static List<Post> breakIntoSubList(Set<Post> postSet, int start, int limit){
+        List<Post> list = new ArrayList<Post>(postSet);
+        List<Post> list2 = list.subList(start, start+limit);
+        System.out.println("list2: \n"+list2);
+
+        //list2.sort();
+        //list2.stream().sorted();
+
+        return list2;
+    }
+
+
+
+    public static <T> List<List<T>> getPages(Collection<T> c, Integer pageSize) {
+        if (c == null)
+            return Collections.emptyList();
+        List<T> list = new ArrayList<T>(c);
+        if (pageSize == null || pageSize <= 0 || pageSize > list.size())
+            pageSize = list.size();
+        int numPages = (int) Math.ceil((double)list.size() / (double)pageSize);
+        List<List<T>> pages = new ArrayList<List<T>>(numPages);
+        for (int pageNum = 0; pageNum < numPages;)
+            pages.add(list.subList(pageNum * pageSize, Math.min(++pageNum * pageSize, list.size())));
+        return pages;
     }
 
 
