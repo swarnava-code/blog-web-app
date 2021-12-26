@@ -4,6 +4,8 @@ import com.mukut.demo.entity.Comment;
 import com.mukut.demo.entity.Post;
 import com.mukut.demo.entity.Tag;
 import com.mukut.demo.entity.User;
+import com.mukut.demo.model.Author;
+import com.mukut.demo.model.Tags;
 import com.mukut.demo.repo.CommentRepository;
 import com.mukut.demo.repo.PostRepository;
 import com.mukut.demo.repo.TagRepository;
@@ -34,16 +36,20 @@ public class HomeController {
     private CommentRepository commentRepository;
 
 
-    @GetMapping("/test")
-    public String test(
+    @GetMapping("test/{id}")
+    public String test (
             @RequestParam(value = "author", required = false) String author,
             @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "v3", required = false) String v3
+            @RequestParam(value = "tt", required = false) String v3,
+            @PathVariable("id") String id
     ){
-        System.out.println(author+"-"+tag+"-"+v3);
+        System.out.println(author+"-"+tag+"-"+v3+"-"+id);
         return "redirect:/";
     }
 
+
+    Author authorModel = new Author();
+    Tags tagsModel = new Tags();
 
     @GetMapping("/")
     public String getBlogList (
@@ -51,8 +57,9 @@ public class HomeController {
             @RequestParam(value = "start", required = false) Integer start,
             @RequestParam(value = "limit", required = false) Integer limit,
             @RequestParam(value = "author", required = false) String author,
-            @RequestParam(value = "publishedAt", required = false) Integer publishedAt,
             @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "publishedAt", required = false) String publishedAt,
+            @RequestParam(value = "order", required = false) String order,
             Model model
     ) {
         List<Post> thePosts = null;
@@ -63,28 +70,81 @@ public class HomeController {
         Set<Post> mergedSet = new HashSet<>(); //merge result
         thePosts = new PostService().findAll(postRepository);
 
-        if (keyword!=null && keyword.length()>1) {
+        if (keyword!=null && keyword.replaceAll(" ","").length()!=0) {
             postByKeywordSearch = postRepository.findByKeyword(keyword);
             mergedSet.addAll(searchTag(keyword));
+            model.addAttribute("search", keyword);
         }
         if (author!=null && author.length()>1 && (!author.equals("all"))) {
             List<String> authorList = new HelperService().makeListFromCSV(author);
+            authorModel.setSwarnava(false);
+            authorModel.setGuddu(false);
+            authorModel.setKalaiya(false);
+            authorModel.setDhritimoy(false);
             for(String authorName: authorList){
-                System.out.println("'"+authorName+"'");
                 postByAuthor = postRepository.findByAuthor(authorName);
                 mergedSet.addAll(postByAuthor);
+                if(authorName.equals("swarnava")){
+                    authorModel.setSwarnava(true);
+                }
+                if(authorName.equals("guddu")){
+                    authorModel.setGuddu(true);
+                }
+                if(authorName.equals("kalaiya")){
+                    authorModel.setKalaiya(true);
+                }
+                if(authorName.equals("dhritimoy")){
+                    authorModel.setDhritimoy(true);
+                }
             }
+        }else{
+            authorModel.setSwarnava(false);
+            authorModel.setGuddu(false);
+            authorModel.setKalaiya(false);
+            authorModel.setDhritimoy(false);
         }
+        //memorizeAuthor(authorName);
+
 
         if ( (start!=null && limit!=null) ) {
             mergedSet.addAll(postRepository.pagination(limit, start));
         }
 
+
+
         if (tag!=null && tag.length()>1 && (!tag.equals("all"))) {
             List<String> tagList = new HelperService().makeListFromCSV(tag);
+
+            tagsModel.setTechnology(false);
+            tagsModel.setLifestyle(false);
+            tagsModel.setMotivation(false);
+            tagsModel.setPolitics(false);
+            tagsModel.setCulture(false);
+
             for(String tagName: tagList){
                 mergedSet.addAll(searchTag(tagName));
+                if(tagName.equals("technology")){
+                    tagsModel.setTechnology(true);
+                }
+                if(tagName.equals("lifestyle")){
+                    tagsModel.setLifestyle(true);
+                }
+                if(tagName.equals("motivation")){
+                    tagsModel.setMotivation(false);
+                }
+                if(tagName.equals("politics")){
+                    tagsModel.setPolitics(true);
+                }
+                if(tagName.equals("culture")){
+                    tagsModel.setCulture(true);
+                }
             }
+        }else{
+            tagsModel.setTechnology(false);
+            tagsModel.setLifestyle(false);
+            tagsModel.setMotivation(false);
+            tagsModel.setPolitics(false);
+            tagsModel.setCulture(false);
         }
 
         if(postByAuthor!=null){
@@ -96,13 +156,68 @@ public class HomeController {
 
         if (mergedSet.isEmpty()){
             model.addAttribute("posts_list", thePosts);
+
         }
         else{
             model.addAttribute("posts_list", mergedSet);
+
         }
+
+
+
+
+
+        model.addAttribute("authorsModel", authorModel);
+        model.addAttribute("tagsModel", tagsModel);
         return "post/posts_list";
     }
 
+
+    public void setAuthorModel(String authorName) {
+        //authorModel.setAuthors("swarnava", false);
+        for(String author : authorsList.keySet()){
+            authorsList.put(author, false);
+        }
+
+        if(authorsList.containsKey(authorName)){
+            if(authorName.equals("swarnava")){
+                //authorModel.setSwarnava(true);
+            }else{
+
+            }
+        }else{
+            authorsList.put(authorName, false);
+        }
+
+        if(!authorsList.containsKey(authorName)){
+            authorsList.put(authorName, false);
+        }
+    }
+
+
+    private Map<String, Boolean> authorsList = new HashMap<String, Boolean>();
+
+    Tags tagModel = new Tags();
+    public void memorizeUserInput(String tag){
+
+
+        //return tagSet;
+    }
+
+    public void memorizeAuthor(String authorName){
+
+
+
+//        if(authorsList.containsKey(authorName)){
+//            if(authorName.equals("swarnava")){
+//                authorsList.put(authorName, true);
+//            }else{
+//                authorsList.put(authorName, false);
+//            }
+//        }else{
+//            authorsList.put(authorName, false);
+//        }
+    }
 
 
     public Set<Post> searchTag(String tag){

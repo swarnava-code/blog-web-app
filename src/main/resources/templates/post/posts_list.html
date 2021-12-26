@@ -24,18 +24,19 @@
     <div class="form-group-option">
         <div class="form-group-input">
             <form th:action="@{/}">
-                <input type="text" th:name="search" placeholder="Search Something!!!" />
+                <input type="text" th:value="${search}" th:name="search" placeholder="Search Something!!!"  />
                 <div class="form-group-input">
-                    Filter by tag :<br>
-                    <input type="checkbox" name="author" value="swarnava">Swarnava Chakraborty
-                    <input type="checkbox" name="author" value="dhritimoy">Dhritimoy Majumder
-                    <input type="checkbox" name="author" value="kalaiya">Kalaiya Rasan
-                    <input type="checkbox" name="author" value="guddu">Guddu Ostad
+                    Filter by author :<br>
+                    <input type="checkbox" name="author" value="swarnava" th:checked="${authorsModel.getSwarnava()}" >Swarnava Chakraborty
+                    <input type="checkbox" name="author" value="dhritimoy" th:checked="${authorsModel.getDhritimoy()}" >Dhritimoy Majumder
+                    <input type="checkbox" name="author" value="kalaiya" th:checked="${authorsModel.getKalaiya()}" >Kalaiya Rasan
+                    <input type="checkbox" name="author" value="guddu" th:checked="${authorsModel.getGuddu()}" >Guddu Ghosh
                     <br>Filter by tag :<br>
-                    <input type="checkbox" name="tag" value="technology">Technology
-                    <input type="checkbox" name="tag" value="lifestyle">Lifestyle
-                    <input type="checkbox" name="tag" value="motivation">Motivation
-                    <input type="checkbox" name="tag" value="politics">Politics
+                    <input type="checkbox" name="tag" value="technology" th:checked="${tagsModel.getTechnology()}" >Technology
+                    <input type="checkbox" name="tag" value="lifestyle" th:checked="${tagsModel.getLifestyle()}" >Lifestyle
+                    <input type="checkbox" name="tag" value="motivation" th:checked="${tagsModel.getMotivation()}">Motivation
+                    <input type="checkbox" name="tag" value="politics" th:checked="${tagsModel.getPolitics()}">Politics
+                    <input type="checkbox" name="tag" value="culture" th:checked="${tagsModel.getCulture()}">Culture
                 </div>
                 <input type="submit"/>
             </form>
@@ -108,6 +109,10 @@
 <!--  document.getElementById("demo").innerHTML = "You wrote: " + x;-->
 <!--}-->
 <!--</script>-->
+
+
+
+
 
 </body>
 </html>
