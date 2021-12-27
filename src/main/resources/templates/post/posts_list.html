@@ -52,10 +52,14 @@
                 </select>
                 <label> Order </label>
                 <select name="order" id="order">
-                    <option value="asc" th:selected="${sortModel.getAsc()}">Ascending</option>
                     <option value="desc" th:selected="${sortModel.getDesc()}">Descending</option>
+                    <option value="asc" th:selected="${sortModel.getAsc()}">Ascending</option>
                 </select>
                 <input type="submit"/>
+
+<!--                <input type="submit" name="left" value="<"/>-->
+<!--                <input type="submit" name="right" value=">"/>-->
+
             </form>
         </div>
         <form action="newpost" method="get">
@@ -64,7 +68,7 @@
     </div>
 </div>
 <br>
-<span th:text="${posts_list.size()}"></span>/<span th:text="${totalSize}"></span>
+<span th:text="${posts_list.size()} "></span> / <span th:text=" ${totalSize}"></span> post
 <br>
 <table>
     <thead>
@@ -104,20 +108,8 @@
     </tbody>
 </table>
 <br><br>
-<a th:href="@{/?start=0&limit=3}">1</a>
-<a th:href="@{/?start=3&limit=3}">2</a>
-<a th:href="@{/?start=6&limit=3}">3</a>
-<br><br>
-
-<!--<input type="text" id="myInput" oninput="myFunction()">-->
-<!--<p id="demo"></p>-->
-<!--<script>-->
-<!--function myFunction() {-->
-<!--  var x = document.getElementById("myInput").value;-->
-<!--  document.getElementById("demo").innerHTML = "You wrote: " + x;-->
-<!--}-->
-<!--</script>-->
-
-
+<tr th:each="page : ${pagination_url}">
+    <a th:href="@{${page.getUrl()}}" ><span th:text="${page.getPageNo()} "></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+</tr>
 </body>
 </html>

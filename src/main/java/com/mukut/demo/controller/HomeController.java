@@ -6,6 +6,7 @@ import com.mukut.demo.entity.Post;
 import com.mukut.demo.entity.Tag;
 import com.mukut.demo.entity.User;
 import com.mukut.demo.model.AuthorModel;
+import com.mukut.demo.model.PageModel;
 import com.mukut.demo.model.SortModel;
 import com.mukut.demo.model.TagModel;
 import com.mukut.demo.repo.CommentRepository;
@@ -24,7 +25,7 @@ import java.util.*;
 public class HomeController {
 
     @Autowired
-    public UserRepository userRepository ;
+    public UserRepository userRepository;
 
     @Autowired
     private PostRepository postRepository;
@@ -37,13 +38,8 @@ public class HomeController {
 
 
     @GetMapping("test/{id}")
-    public String test (
-            @RequestParam(value = "author", required = false) String author,
-            @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "tt", required = false) String v3,
-            @PathVariable("id") String id
-    ){
-        System.out.println(author+"-"+tag+"-"+v3+"-"+id);
+    public String test(@RequestParam(value = "author", required = false) String author, @RequestParam(value = "tag", required = false) String tag, @RequestParam(value = "tt", required = false) String v3, @PathVariable("id") String id) {
+        System.out.println(author + "-" + tag + "-" + v3 + "-" + id);
         return "redirect:/";
     }
 
@@ -55,16 +51,7 @@ public class HomeController {
     final int LIMIT = 1;
 
     @GetMapping("/")
-    public String getBlogList (
-            @RequestParam(value = "search", required = false) String keyword,
-            @RequestParam(value = "start", required = false) Integer start,
-            @RequestParam(value = "limit", required = false) Integer limit,
-            @RequestParam(value = "author", required = false) String author,
-            @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "sortField", required = false) String sortField,
-            @RequestParam(value = "order", required = false) String order,
-            Model model
-    ) {
+    public String getBlogList(@RequestParam(value = "search", required = false) String keyword, @RequestParam(value = "start", required = false) Integer start, @RequestParam(value = "limit", required = false) Integer limit, @RequestParam(value = "author", required = false) String author, @RequestParam(value = "tag", required = false) String tag, @RequestParam(value = "sortField", required = false) String sortField, @RequestParam(value = "order", required = false) String order, Model model) {
         List<Post> thePosts = null;
         Set<Post> postByKeywordSearch = null;
         Set<Post> postByTags = null; //filter
@@ -73,34 +60,34 @@ public class HomeController {
         Set<Post> mergedSet = new HashSet<>(); //merge result
         thePosts = new PostService().findAll(postRepository);
 
-        if (keyword!=null && keyword.replaceAll(" ","").length()!=0) {
-            postByKeywordSearch = postRepository.findByKeyword(keyword, author, order);
+        if (keyword != null && keyword.replaceAll(" ", "").length() != 0) {
+            postByKeywordSearch = postRepository.findByKeyword(keyword);
             mergedSet.addAll(searchTag(keyword));
             model.addAttribute("search", keyword);
         }
-        if (author!=null && author.length()>1 && (!author.equals("all"))) {
+        if (author != null && author.length() > 1 && (!author.equals("all"))) {
             List<String> authorList = new HelperService().makeListFromCSV(author);
             authorModel.setSwarnava(false);
             authorModel.setGuddu(false);
             authorModel.setKalaiya(false);
             authorModel.setDhritimoy(false);
-            for(String authorName: authorList){
-                postByAuthor = postRepository.findByAuthor(authorName, sortField, order);
+            for (String authorName : authorList) {
+                postByAuthor = postRepository.findByAuthor(authorName);
                 mergedSet.addAll(postByAuthor);
-                if(authorName.equals("swarnava")){
+                if (authorName.equals("swarnava")) {
                     authorModel.setSwarnava(true);
                 }
-                if(authorName.equals("guddu")){
+                if (authorName.equals("guddu")) {
                     authorModel.setGuddu(true);
                 }
-                if(authorName.equals("kalaiya")){
+                if (authorName.equals("kalaiya")) {
                     authorModel.setKalaiya(true);
                 }
-                if(authorName.equals("dhritimoy")){
+                if (authorName.equals("dhritimoy")) {
                     authorModel.setDhritimoy(true);
                 }
             }
-        }else{
+        } else {
             authorModel.setSwarnava(false);
             authorModel.setGuddu(false);
             authorModel.setKalaiya(false);
@@ -119,8 +106,7 @@ public class HomeController {
  */
 
 
-
-        if (tag!=null && tag.length()>1 && (!tag.equals("all"))) {
+        if (tag != null && tag.length() > 1 && (!tag.equals("all"))) {
             List<String> tagList = new HelperService().makeListFromCSV(tag);
 
             tagsModel.setTechnology(false);
@@ -129,25 +115,25 @@ public class HomeController {
             tagsModel.setPolitics(false);
             tagsModel.setCulture(false);
 
-            for(String tagName: tagList){
+            for (String tagName : tagList) {
                 mergedSet.addAll(searchTag(tagName));
-                if(tagName.equals("technology")){
+                if (tagName.equals("technology")) {
                     tagsModel.setTechnology(true);
                 }
-                if(tagName.equals("lifestyle")){
+                if (tagName.equals("lifestyle")) {
                     tagsModel.setLifestyle(true);
                 }
-                if(tagName.equals("motivation")){
+                if (tagName.equals("motivation")) {
                     tagsModel.setMotivation(false);
                 }
-                if(tagName.equals("politics")){
+                if (tagName.equals("politics")) {
                     tagsModel.setPolitics(true);
                 }
-                if(tagName.equals("culture")){
+                if (tagName.equals("culture")) {
                     tagsModel.setCulture(true);
                 }
             }
-        }else{
+        } else {
             tagsModel.setTechnology(false);
             tagsModel.setLifestyle(false);
             tagsModel.setMotivation(false);
@@ -155,100 +141,106 @@ public class HomeController {
             tagsModel.setCulture(false);
         }
 
-        if(postByAuthor!=null){
+        if (postByAuthor != null) {
             mergedSet.addAll(postByAuthor);
         }
-        if(postByKeywordSearch!=null){
+        if (postByKeywordSearch != null) {
             mergedSet.addAll(postByKeywordSearch);
         }
 
         List<Post> convertedList = new ArrayList<>();
-        convertedList.addAll(mergedSet);//convert set to list
+        convertedList.addAll(mergedSet); //convert set to list
 
-        if(start == null || limit == null){
+        if (start == null || limit == null) {
             start = 0;
             limit = 10;
         }
 
         List<Post> sortedList;
         int size;
-        if (!convertedList.isEmpty()){
+        if (!convertedList.isEmpty()) {
+            System.out.println("!convertedList.isEmpty()");
             sortedList = sort(convertedList, sortField, order);
             size = sortedList.size();
-            limit = (size<limit)?size:limit;
-            model.addAttribute("posts_list", sortedList.subList(start, limit));//mergedSet
-        }
-        else{
+            //limit += start;
+            limit = (size < limit) ? size : limit;
+
+            model.addAttribute("posts_list", sortedList.subList(start, start + limit));//mergedSet
+        } else {
+            System.out.println("convertedList.isEmpty()");
             sortedList = sort(thePosts, sortField, order);
             size = sortedList.size();
-            limit = (size<limit)?size:limit;
-            model.addAttribute("posts_list", sortedList.subList(start, limit)); ////thePosts
-        }
-        model.addAttribute("totalSize", size);
 
+            System.out.println("start:" + start + " ,  limit: " + limit);
+            //limit += start;
+            limit = (size < limit) ? size : limit;
+            System.out.println("start:" + start + " ,  limit: " + limit);
+            System.out.println("sortedList\n" + sortedList);
+            System.out.println("sortedList.subList\n" + sortedList.subList(start, start + limit));
+
+            model.addAttribute("posts_list", sortedList.subList(start, start + limit)); ////thePosts
+        }
+
+        List<PageModel> paginationUrl = pagination(start, limit);
+
+        model.addAttribute("totalSize", size);
         model.addAttribute("authorsModel", authorModel);
         model.addAttribute("tagsModel", tagsModel);
         model.addAttribute("sortModel", sortModel);
+        model.addAttribute("pagination_url", paginationUrl);
         return "post/posts_list";
     }
 
-    public List<Post> sort(List<Post> sortedList, String sortField, String order){
-        if(sortField != null){
+    public List<Post> sort(List<Post> sortedList, String sortField, String order) {
+        if (sortField != null) {
             sortModel.setAuthor(false);
             sortModel.setExcerpt(false);
             sortModel.setPublishedAt(false);
             sortModel.setTitle(false);
             sortModel.setAsc(false);
             sortModel.setDesc(false);
-            if(sortField.equals("author")){
+            if (sortField.equals("author")) {
                 sortModel.setAuthor(true);
                 System.out.println("applying sort based on author");
-                if(order!=null && order.equals("desc")) {
+                if (order != null && order.equals("desc")) {
                     sortModel.setDesc(true);
                     Collections.sort(sortedList, new PostAuthorComparatorDesc());
-                }
-                else{
+                } else {
                     sortModel.setAsc(true);
                     Collections.sort(sortedList, new PostAuthorComparatorAsc());
                 }
-            }
-            else if(sortField.equals("title")){
+            } else if (sortField.equals("title")) {
                 sortModel.setTitle(true);
                 System.out.println("applying sort based on title");
-                if(order!=null && order.equals("desc")){
+                if (order != null && order.equals("desc")) {
                     sortModel.setDesc(true);
                     Collections.sort(sortedList, new PostTitleComparatorDesc());
-                }
-                else{
+                } else {
                     sortModel.setAsc(true);
                     Collections.sort(sortedList, new PostTitleComparatorAsc());
                 }
-            }
-            else if(sortField.equals("excerpt")){
+            } else if (sortField.equals("excerpt")) {
                 sortModel.setExcerpt(true);
                 System.out.println("applying sort based on excerpt");
-                if(order!=null && order.equals("desc")){
+                if (order != null && order.equals("desc")) {
                     sortModel.setDesc(true);
                     Collections.sort(sortedList, new PostExcerptComparatorDesc());
-                }
-                else{
+                } else {
                     sortModel.setAsc(true);
                     Collections.sort(sortedList, new PostExcerptComparatorAsc());
                 }
-            }
-            else {
+            } else {
                 sortModel.setPublishedAt(true);
                 System.out.println("else : applying sort based on pubAt");
-                if(order!=null && order.equals("desc")){
+                if (order != null && order.equals("asc")) {
+                    sortModel.setAsc(true);
+                    Collections.sort(sortedList, new PostPublishedAtComparatorAsc());
+                } else {
                     sortModel.setDesc(true);
                     Collections.sort(sortedList, new PostPublishedAtComparatorDesc());
                 }
-                else{
-                    sortModel.setAsc(true);
-                    Collections.sort(sortedList, new PostPublishedAtComparatorAsc());
-                }
             }
-        } else{
+        } else {
             sortModel.setAuthor(false);
             sortModel.setExcerpt(false);
             sortModel.setPublishedAt(true);
@@ -257,25 +249,38 @@ public class HomeController {
             sortModel.setDesc(false);
 
             System.out.println("sortField==null : applying sort based on sortField");
-            if(order!=null && order.equals("desc")){
-                Collections.sort(sortedList, new PostTitleComparatorDesc());
-            }
-            else{
+            if (order != null && order.equals("asc")) {
                 sortModel.setAsc(true);
-                Collections.sort(sortedList, new PostTitleComparatorAsc());
+                Collections.sort(sortedList, new PostPublishedAtComparatorDesc());
+            } else {
+                Collections.sort(sortedList, new PostPublishedAtComparatorDesc());
             }
         }
         return sortedList;
     }
 
-    public Set<Post> searchTag(String tag){
+    public List<PageModel> pagination(int start, int limit){
+        List<PageModel> paginationUrl = new ArrayList<PageModel>();
+        PageModel page1 = new PageModel();
+        page1.setStart(0);
+        page1.setLimit(10);
+        page1.setPageNo(1);
+        paginationUrl.add(page1);
+        PageModel page2 = new PageModel();
+        page2.setStart(10);
+        page2.setLimit(5);
+        page2.setPageNo(2);
+        paginationUrl.add(page2);
+        return paginationUrl;
+    }
+
+    public Set<Post> searchTag(String tag) {
         List<Tag> tags = tagRepository.findByTag(tag);
         Set<Post> tagSet = new LinkedHashSet<>();
-        for (Tag eachTag: tags) {
+        for (Tag eachTag : tags) {
             Optional<Post> optionalPost = postRepository.findById(eachTag.getPostId());
-            if(!optionalPost.isEmpty()){
-                if(optionalPost.get()!=null)
-                    tagSet.add(optionalPost.get());
+            if (!optionalPost.isEmpty()) {
+                if (optionalPost.get() != null) tagSet.add(optionalPost.get());
             }
         }
         return tagSet;
@@ -283,9 +288,7 @@ public class HomeController {
 
 
     @GetMapping("/deleteBlogPost")
-    public String deleteBlogPost(
-            @RequestParam("postId") int postId
-    ) {
+    public String deleteBlogPost(@RequestParam("postId") int postId) {
         postRepository.deleteById(postId);
         return "redirect:/";
     }
@@ -293,100 +296,77 @@ public class HomeController {
     PostService postService = new PostService();
 
     @GetMapping("/updateBlogPost")
-    public String updateBlogPost(
-            @RequestParam("postId") int postId,
-            Model model
-    ) {
-        Post post = postService.findPostById(postRepository ,postId);
+    public String updateBlogPost(@RequestParam("postId") int postId, Model model) {
+        Post post = postService.findPostById(postRepository, postId);
         //Post post = postRepository.getById(postId);
         model.addAttribute("post", post);
         return "post/update_post";
     }
+
     @PostMapping("post_updated")
-    public String postUpdate(
-            @ModelAttribute Post post
-    ){
+    public String postUpdate(@ModelAttribute Post post) {
         new PostService().save(postRepository, post);
         return "redirect:/";
     }
 
     @GetMapping("/showBlogPost/deleteComment")
-    public String deleteComment(
-            @RequestParam(value="id", required=false) int id
-    ) {
+    public String deleteComment(@RequestParam(value = "id", required = false) int id) {
         Optional<Comment> commentResult = commentRepository.findById(id);
         commentRepository.deleteById(id);
-        return "redirect:/showBlogPost?postId="+commentResult.get().getPostId();
+        return "redirect:/showBlogPost?postId=" + commentResult.get().getPostId();
     }
 
     @GetMapping("/showBlogPost/updateComment")
-    public String updateComment(
-            @RequestParam("id") int commentId,
-            Model model
-    ) {
+    public String updateComment(@RequestParam("id") int commentId, Model model) {
         Optional<Comment> optional = commentRepository.findById(commentId);
         Comment comment = optional.get();
-        model.addAttribute("comment" ,comment);
+        model.addAttribute("comment", comment);
         return "comment/update_comment";
     }
 
     @PostMapping("showBlogPost/comment_updated")
-    public String commentUpdated(
-            @RequestParam(value = "id", required = false) Integer commentId,
-            @RequestParam(value = "comment", required = false) String commentMsg
-    ) {
+    public String commentUpdated(@RequestParam(value = "id", required = false) Integer commentId, @RequestParam(value = "comment", required = false) String commentMsg) {
         Optional<Comment> optional = commentRepository.findById(commentId);
         Comment comment = optional.get();
         comment.setComment(commentMsg);
         comment.setId(commentId);
         int postId = comment.getPostId();
-        Comment commentInserted = new CommentService().update(commentRepository ,comment);
-        return "redirect:/showBlogPost?postId="+postId;
+        Comment commentInserted = new CommentService().update(commentRepository, comment);
+        return "redirect:/showBlogPost?postId=" + postId;
     }
 
     @GetMapping("/newpost")
-    public String newpost(){
+    public String newpost() {
         return "post/newpost";
     }
 
 
     @PostMapping("/newpost_submitted")
-    public String newpost_submit(
-            @ModelAttribute Post posts,
-            @RequestParam("tags") String tags
-    ) {
+    public String newpost_submit(@ModelAttribute Post posts, @RequestParam("tags") String tags) {
         Post postInserted = new PostService().save(postRepository, posts);
         new TagService().saveEachTag(tagRepository, tags, postInserted.getId(), postInserted.getCreated_at(), postInserted.getUpdated_at());
         return "redirect:/";
     }
 
 
-
-
-
     //################################################# for user
 
     @GetMapping("/register")
-    public String index(){
+    public String index() {
         return "user/register";
     }
 
     @PostMapping("/register_done")
-    public String register(
-            @ModelAttribute User user,
-            Model model
-    ) {
-        User userDetails = new UserService().save(userRepository ,user);
-        model.addAttribute("message", userDetails.getFname()+" inserted.\n");
+    public String register(@ModelAttribute User user, Model model) {
+        User userDetails = new UserService().save(userRepository, user);
+        model.addAttribute("message", userDetails.getFname() + " inserted.\n");
         return "welcome";
     }
 
     //################################################# for retrieve
 
     @GetMapping("/userslist")
-    public String getUserList (
-            Model model
-    ) {
+    public String getUserList(Model model) {
         List<User> theUsers = new UserService().findAll(userRepository);
         model.addAttribute("users_list", theUsers);
         model.addAttribute("user5", userRepository.findById(5).toString());
@@ -394,16 +374,11 @@ public class HomeController {
     }
 
     @GetMapping("/showBlogPost")
-    public String showBlogPost(
-            @RequestParam("postId") int postId,
-            Model postModel,
-            Model tagModel,
-            Model commentModel
-    ) {
+    public String showBlogPost(@RequestParam("postId") int postId, Model postModel, Model tagModel, Model commentModel) {
         Post post = null;
-        try{
-            post = new PostService().findPostById(postRepository ,postId);
-        }catch (Exception e){
+        try {
+            post = new PostService().findPostById(postRepository, postId);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         postModel.addAttribute("post", post);
@@ -419,13 +394,10 @@ public class HomeController {
 
 
     @PostMapping("/comments_submitted")
-    public String comments(
-            @ModelAttribute("comments") Comment comment
-    ) {
-        Comment comment_inserted = new CommentService().save(commentRepository ,comment);
-        return "redirect:/showBlogPost?postId="+comment.getPostId();
+    public String comments(@ModelAttribute("comments") Comment comment) {
+        Comment comment_inserted = new CommentService().save(commentRepository, comment);
+        return "redirect:/showBlogPost?postId=" + comment.getPostId();
     }
-
 
 
 //    findByKeyword
