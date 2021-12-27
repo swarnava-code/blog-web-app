@@ -81,8 +81,8 @@
           </tr>
           </tbody>
       </table>
-      <br><br><hr>
-      <h3>Enter your comment here</h3><br>
+      <br><hr>
+      <h3>Enter your comment here</h3>
       <form action="comments_submitted" method="post" th:object="${comments}">
           <!-- take id from post and include into post_id of comment object-->
           <input type="hidden" name="postId" th:value="${post.id}"  /><br>

@@ -1,6 +1,6 @@
 package com.mukut.demo.controller;
 
-import com.mukut.demo.comparator.PostAuthorComparatorAsc;
+import com.mukut.demo.comparator.*;
 import com.mukut.demo.entity.Comment;
 import com.mukut.demo.entity.Post;
 import com.mukut.demo.entity.Tag;
@@ -49,6 +49,8 @@ public class HomeController {
 
     Author authorModel = new Author();
     Tags tagsModel = new Tags();
+    final int START = 1;
+    final int LIMIT = 1;
 
     @GetMapping("/")
     public String getBlogList (
@@ -102,12 +104,17 @@ public class HomeController {
             authorModel.setKalaiya(false);
             authorModel.setDhritimoy(false);
         }
-        //memorizeAuthor(authorName);
 
 
-        if ( (start!=null && limit!=null) ) {
+/*
+        if ( (start!=null && limit!=null && start!=limit)  ) {
             mergedSet.addAll(postRepository.pagination(limit, start));
+        }else{
+            start = 0;
+            limit = 10;
         }
+
+ */
 
 
 
@@ -153,121 +160,77 @@ public class HomeController {
             mergedSet.addAll(postByKeywordSearch);
         }
 
+        List<Post> convertedList = new ArrayList<>();
+        convertedList.addAll(mergedSet);//convert set to list
 
+        if(start == null || limit == null){
+            start = 0;
+            limit = 10;
+        }
 
-
-//        List<Post> sortedList = new ArrayList<>();
-//        sortedList.addAll(mergedSet);//convert set to list
-//        //sortField, order
-//        //publishedAt, excerpt, title
-//        if(sortField.equals("author")){
-//            Collections.sort(sortedList, new PostAuthorComparator());
-//        }
-//        if(sortField.equals("title")){
-//            Collections.sort(sortedList, new PostAuthorComparator());
-//        }
-//        if(sortField.equals("excerpt")){
-//            Collections.sort(sortedList, new PostAuthorComparator());
-//        }
-//        else {
-//            Collections.sort(sortedList, new PostAuthorComparator());
-//        }
-
-        Collections.sort(thePosts, new PostAuthorComparatorAsc());
-
-
-
-        if (mergedSet.isEmpty()){
-            model.addAttribute("posts_list", thePosts); //thePosts
-
+        List<Post> sortedList;
+        int size;
+        if (!convertedList.isEmpty()){
+            sortedList = sort(convertedList, sortField, order);
+            size = sortedList.size();
+            limit = (size<limit)?size:limit;
+            model.addAttribute("posts_list", sortedList.subList(start, limit));//mergedSet
         }
         else{
-            //model.addAttribute("posts_list", sortedList ); //mergedSet
-
+            sortedList = sort(thePosts, sortField, order);
+            size = sortedList.size();
+            limit = (size<limit)?size:limit;
+            model.addAttribute("posts_list", sortedList.subList(start, limit)); ////thePosts
         }
-
-//breakIntoSubList(mergedSet, start, limit)
-
-
+        model.addAttribute("totalSize", size);
 
         model.addAttribute("authorsModel", authorModel);
         model.addAttribute("tagsModel", tagsModel);
         return "post/posts_list";
     }
 
-    public static List<Post> breakIntoSubList(Set<Post> postSet, int start, int limit){
-        List<Post> list = new ArrayList<Post>(postSet);
-        List<Post> list2 = list.subList(start, start+limit);
-        System.out.println("list2: \n"+list2);
-
-        //list2.sort();
-        //list2.stream().sorted();
-
-        return list2;
-    }
-
-
-
-    public static <T> List<List<T>> getPages(Collection<T> c, Integer pageSize) {
-        if (c == null)
-            return Collections.emptyList();
-        List<T> list = new ArrayList<T>(c);
-        if (pageSize == null || pageSize <= 0 || pageSize > list.size())
-            pageSize = list.size();
-        int numPages = (int) Math.ceil((double)list.size() / (double)pageSize);
-        List<List<T>> pages = new ArrayList<List<T>>(numPages);
-        for (int pageNum = 0; pageNum < numPages;)
-            pages.add(list.subList(pageNum * pageSize, Math.min(++pageNum * pageSize, list.size())));
-        return pages;
-    }
-
-
-    public void setAuthorModel(String authorName) {
-        //authorModel.setAuthors("swarnava", false);
-        for(String author : authorsList.keySet()){
-            authorsList.put(author, false);
-        }
-
-        if(authorsList.containsKey(authorName)){
-            if(authorName.equals("swarnava")){
-                //authorModel.setSwarnava(true);
-            }else{
-
+    public List<Post> sort(List<Post> sortedList, String sortField, String order){
+        if(sortField != null){
+            if(sortField.equals("author")){
+                System.out.println("applying sort based on author");
+                if(order!=null && order.equals("desc"))
+                    Collections.sort(sortedList, new PostAuthorComparatorDesc());
+                else
+                    Collections.sort(sortedList, new PostAuthorComparatorAsc());
             }
-        }else{
-            authorsList.put(authorName, false);
+            else if(sortField.equals("title")){
+                System.out.println("applying sort based on title");
+                if(order!=null && order.equals("desc"))
+                    Collections.sort(sortedList, new PostTitleComparatorDesc());
+                else
+                    Collections.sort(sortedList, new PostTitleComparatorAsc());
+            }
+            else if(sortField.equals("excerpt")){
+                System.out.println("applying sort based on excerpt");
+                if(order!=null && order.equals("desc"))
+                    Collections.sort(sortedList, new PostExcerptComparatorDesc());
+                else
+                    Collections.sort(sortedList, new PostExcerptComparatorAsc());
+            }
+            else {
+                System.out.println("else : applying sort based on pubAt");
+                if(order!=null && order.equals("desc")){
+                    System.out.println("sdfg2");
+                    Collections.sort(sortedList, new PostPublishedAtComparatorDesc());
+                }
+
+                else
+                    Collections.sort(sortedList, new PostPublishedAtComparatorAsc());
+            }
+        } else{
+            System.out.println("sortField==null : applying sort based on sortField");
+            if(order!=null && order.equals("desc"))
+                Collections.sort(sortedList, new PostTitleComparatorDesc());
+            else
+                Collections.sort(sortedList, new PostTitleComparatorAsc());
         }
-
-        if(!authorsList.containsKey(authorName)){
-            authorsList.put(authorName, false);
-        }
+        return sortedList;
     }
-
-
-    private Map<String, Boolean> authorsList = new HashMap<String, Boolean>();
-
-    Tags tagModel = new Tags();
-    public void memorizeUserInput(String tag){
-
-
-        //return tagSet;
-    }
-
-    public void memorizeAuthor(String authorName){
-
-
-
-//        if(authorsList.containsKey(authorName)){
-//            if(authorName.equals("swarnava")){
-//                authorsList.put(authorName, true);
-//            }else{
-//                authorsList.put(authorName, false);
-//            }
-//        }else{
-//            authorsList.put(authorName, false);
-//        }
-    }
-
 
     public Set<Post> searchTag(String tag){
         List<Tag> tags = tagRepository.findByTag(tag);
