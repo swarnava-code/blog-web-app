@@ -1,7 +1,7 @@
 package com.mukut.demo.model;
 
 
-public class Author {
+public class AuthorModel {
     private Boolean swarnava;
     private Boolean dhritimoy;
     private Boolean kalaiya;

@@ -5,8 +5,9 @@ import com.mukut.demo.entity.Comment;
 import com.mukut.demo.entity.Post;
 import com.mukut.demo.entity.Tag;
 import com.mukut.demo.entity.User;
-import com.mukut.demo.model.Author;
-import com.mukut.demo.model.Tags;
+import com.mukut.demo.model.AuthorModel;
+import com.mukut.demo.model.SortModel;
+import com.mukut.demo.model.TagModel;
 import com.mukut.demo.repo.CommentRepository;
 import com.mukut.demo.repo.PostRepository;
 import com.mukut.demo.repo.TagRepository;
@@ -47,8 +48,9 @@ public class HomeController {
     }
 
 
-    Author authorModel = new Author();
-    Tags tagsModel = new Tags();
+    AuthorModel authorModel = new AuthorModel();
+    TagModel tagsModel = new TagModel();
+    SortModel sortModel = new SortModel();
     final int START = 1;
     final int LIMIT = 1;
 
@@ -186,48 +188,82 @@ public class HomeController {
 
         model.addAttribute("authorsModel", authorModel);
         model.addAttribute("tagsModel", tagsModel);
+        model.addAttribute("sortModel", sortModel);
         return "post/posts_list";
     }
 
     public List<Post> sort(List<Post> sortedList, String sortField, String order){
         if(sortField != null){
+            sortModel.setAuthor(false);
+            sortModel.setExcerpt(false);
+            sortModel.setPublishedAt(false);
+            sortModel.setTitle(false);
+            sortModel.setAsc(false);
+            sortModel.setDesc(false);
             if(sortField.equals("author")){
+                sortModel.setAuthor(true);
                 System.out.println("applying sort based on author");
-                if(order!=null && order.equals("desc"))
+                if(order!=null && order.equals("desc")) {
+                    sortModel.setDesc(true);
                     Collections.sort(sortedList, new PostAuthorComparatorDesc());
-                else
+                }
+                else{
+                    sortModel.setAsc(true);
                     Collections.sort(sortedList, new PostAuthorComparatorAsc());
+                }
             }
             else if(sortField.equals("title")){
+                sortModel.setTitle(true);
                 System.out.println("applying sort based on title");
-                if(order!=null && order.equals("desc"))
+                if(order!=null && order.equals("desc")){
+                    sortModel.setDesc(true);
                     Collections.sort(sortedList, new PostTitleComparatorDesc());
-                else
+                }
+                else{
+                    sortModel.setAsc(true);
                     Collections.sort(sortedList, new PostTitleComparatorAsc());
+                }
             }
             else if(sortField.equals("excerpt")){
+                sortModel.setExcerpt(true);
                 System.out.println("applying sort based on excerpt");
-                if(order!=null && order.equals("desc"))
+                if(order!=null && order.equals("desc")){
+                    sortModel.setDesc(true);
                     Collections.sort(sortedList, new PostExcerptComparatorDesc());
-                else
+                }
+                else{
+                    sortModel.setAsc(true);
                     Collections.sort(sortedList, new PostExcerptComparatorAsc());
+                }
             }
             else {
+                sortModel.setPublishedAt(true);
                 System.out.println("else : applying sort based on pubAt");
                 if(order!=null && order.equals("desc")){
-                    System.out.println("sdfg2");
+                    sortModel.setDesc(true);
                     Collections.sort(sortedList, new PostPublishedAtComparatorDesc());
                 }
-
-                else
+                else{
+                    sortModel.setAsc(true);
                     Collections.sort(sortedList, new PostPublishedAtComparatorAsc());
+                }
             }
         } else{
+            sortModel.setAuthor(false);
+            sortModel.setExcerpt(false);
+            sortModel.setPublishedAt(true);
+            sortModel.setTitle(false);
+            sortModel.setAsc(false);
+            sortModel.setDesc(false);
+
             System.out.println("sortField==null : applying sort based on sortField");
-            if(order!=null && order.equals("desc"))
+            if(order!=null && order.equals("desc")){
                 Collections.sort(sortedList, new PostTitleComparatorDesc());
-            else
+            }
+            else{
+                sortModel.setAsc(true);
                 Collections.sort(sortedList, new PostTitleComparatorAsc());
+            }
         }
         return sortedList;
     }

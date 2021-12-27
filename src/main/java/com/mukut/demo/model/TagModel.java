@@ -1,6 +1,6 @@
 package com.mukut.demo.model;
 
-public class Tags {
+public class TagModel {
     private Boolean technology;
     private Boolean lifestyle;
     private Boolean motivation;
