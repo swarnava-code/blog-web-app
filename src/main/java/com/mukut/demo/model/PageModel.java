@@ -10,6 +10,15 @@ public class PageModel {
         return pageNo;
     }
 
+    @Override
+    public String toString() {
+        return "PageModel{" +
+                "pageNo=" + pageNo +
+                ", start=" + start +
+                ", limit=" + limit +
+                '}';
+    }
+
     public void setPageNo(Integer pageNo) {
         this.pageNo = pageNo;
     }

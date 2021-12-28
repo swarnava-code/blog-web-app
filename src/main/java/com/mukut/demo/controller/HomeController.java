@@ -15,6 +15,7 @@ import com.mukut.demo.repo.TagRepository;
 import com.mukut.demo.repo.UserRepository;
 import com.mukut.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,10 +38,32 @@ public class HomeController {
     private CommentRepository commentRepository;
 
 
-    @GetMapping("test/{id}")
-    public String test(@RequestParam(value = "author", required = false) String author, @RequestParam(value = "tag", required = false) String tag, @RequestParam(value = "tt", required = false) String v3, @PathVariable("id") String id) {
-        System.out.println(author + "-" + tag + "-" + v3 + "-" + id);
-        return "redirect:/";
+    @GetMapping("test/")
+    public String test(
+            @RequestParam(value = "author", required = false) String author,
+            @RequestParam(value = "start", required = false) Integer start,
+            @RequestParam(value = "limit", required = false) Integer limit,
+            Model model
+    ) {
+        Page<Post> page = postService.findPaginated(postRepository, 1, 10);
+        List<Post> pageContent = page.getContent();
+
+        System.out.println(pageContent);
+        model.addAttribute("posts_list", pageContent); ////thePosts
+//
+//
+//        model.addAttribute("currentPage", 1);
+//        model.addAttribute("totalPages", page.getTotalPages());
+//        model.addAttribute("totalItems", page.getTotalElements());
+//
+//        model.addAttribute("sortField", "asc");
+//        model.addAttribute("sortDir", "asc");
+       // model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
+        //model.addAttribute("listEmployees", pageContent);
+
+        return "post/posts_list";
+        //return "redirect:/";
     }
 
 
@@ -48,10 +71,17 @@ public class HomeController {
     TagModel tagsModel = new TagModel();
     SortModel sortModel = new SortModel();
     final int START = 1;
-    final int LIMIT = 1;
+
 
     @GetMapping("/")
-    public String getBlogList(@RequestParam(value = "search", required = false) String keyword, @RequestParam(value = "start", required = false) Integer start, @RequestParam(value = "limit", required = false) Integer limit, @RequestParam(value = "author", required = false) String author, @RequestParam(value = "tag", required = false) String tag, @RequestParam(value = "sortField", required = false) String sortField, @RequestParam(value = "order", required = false) String order, Model model) {
+    public String getBlogList(
+            @RequestParam(value = "search", required = false) String keyword,
+            @RequestParam(value = "start", required = false) Integer start,
+            @RequestParam(value = "limit", required = false) Integer limit,
+            @RequestParam(value = "author", required = false) String author,
+            @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "sortField", required = false) String sortField,
+            @RequestParam(value = "order", required = false) String order, Model model) {
         List<Post> thePosts = null;
         Set<Post> postByKeywordSearch = null;
         Set<Post> postByTags = null; //filter
@@ -93,17 +123,6 @@ public class HomeController {
             authorModel.setKalaiya(false);
             authorModel.setDhritimoy(false);
         }
-
-
-/*
-        if ( (start!=null && limit!=null && start!=limit)  ) {
-            mergedSet.addAll(postRepository.pagination(limit, start));
-        }else{
-            start = 0;
-            limit = 10;
-        }
-
- */
 
 
         if (tag != null && tag.length() > 1 && (!tag.equals("all"))) {
@@ -151,21 +170,30 @@ public class HomeController {
         List<Post> convertedList = new ArrayList<>();
         convertedList.addAll(mergedSet); //convert set to list
 
-        if (start == null || limit == null) {
+        //Pagination
+        int size ;
+        if (start == null) {
             start = 0;
-            limit = 10;
+        }
+        if (limit == null) {
+            limit = LIMIT;
         }
 
+        List<PageModel> paginationUrl;
         List<Post> sortedList;
-        int size;
         if (!convertedList.isEmpty()) {
             System.out.println("!convertedList.isEmpty()");
             sortedList = sort(convertedList, sortField, order);
             size = sortedList.size();
             //limit += start;
-            limit = (size < limit) ? size : limit;
 
-            model.addAttribute("posts_list", sortedList.subList(start, start + limit));//mergedSet
+
+
+            paginationUrl = pagination(sortedList, start, limit);
+
+            //limit = (size < limit) ? size : limit;
+
+            model.addAttribute("posts_list", createSubList(sortedList, start, limit)); //mergedSet
         } else {
             System.out.println("convertedList.isEmpty()");
             sortedList = sort(thePosts, sortField, order);
@@ -173,22 +201,56 @@ public class HomeController {
 
             System.out.println("start:" + start + " ,  limit: " + limit);
             //limit += start;
-            limit = (size < limit) ? size : limit;
+            //limit = (size < limit) ? size : limit;
             System.out.println("start:" + start + " ,  limit: " + limit);
             System.out.println("sortedList\n" + sortedList);
             System.out.println("sortedList.subList\n" + sortedList.subList(start, start + limit));
 
-            model.addAttribute("posts_list", sortedList.subList(start, start + limit)); ////thePosts
+
+            paginationUrl = pagination(sortedList, start, limit);
+
+            model.addAttribute("posts_list", createSubList(sortedList, start, limit)); ////thePosts
         }
 
-        List<PageModel> paginationUrl = pagination(start, limit);
+
 
         model.addAttribute("totalSize", size);
         model.addAttribute("authorsModel", authorModel);
         model.addAttribute("tagsModel", tagsModel);
         model.addAttribute("sortModel", sortModel);
         model.addAttribute("pagination_url", paginationUrl);
+
+
+        //test
+        model.addAttribute("currentPage", 1);
+        model.addAttribute("totalPage", (size/LIMIT));//modify later: case:only 5 pg, case:left 1 page
+
         return "post/posts_list";
+    }
+
+
+
+    public List<Post> createSubList(List<Post> post, int start, int limit){
+        List<Integer> list = new ArrayList<>();
+
+        int fromIndex=start, toIndex=limit, size = post.size();
+        if (start >= size) {
+            System.out.println(" start >= size ");
+            fromIndex = size-1;
+        }
+        if (start < 0) {
+            System.out.println(" start < 0 ");
+            fromIndex = 0;
+        }
+
+        toIndex = limit + start;
+        if (toIndex >= size) {
+            toIndex = size-1;
+        }
+
+        System.out.println("fromIndex: "+fromIndex+" , toIndex"+toIndex);
+
+        return post.subList(fromIndex, toIndex);
     }
 
     public List<Post> sort(List<Post> sortedList, String sortField, String order) {
@@ -259,18 +321,58 @@ public class HomeController {
         return sortedList;
     }
 
-    public List<PageModel> pagination(int start, int limit){
+    final int LIMIT = 4;
+    public List<PageModel> pagination(List<Post> posts, int start, int limit){
+        int noOfRow = posts.size();
         List<PageModel> paginationUrl = new ArrayList<PageModel>();
-        PageModel page1 = new PageModel();
-        page1.setStart(0);
-        page1.setLimit(10);
-        page1.setPageNo(1);
-        paginationUrl.add(page1);
-        PageModel page2 = new PageModel();
-        page2.setStart(10);
-        page2.setLimit(5);
-        page2.setPageNo(2);
-        paginationUrl.add(page2);
+
+        List<Integer> list = new ArrayList<>();
+
+        int fromIndex=0, toIndex=LIMIT;
+        if (start >= noOfRow) {
+            fromIndex = noOfRow-1;
+        }
+        if (start < 0) {
+            fromIndex = 0;
+        }
+
+        toIndex = limit + start;
+        if (toIndex >= noOfRow) {
+            toIndex = noOfRow-1;
+        }
+
+        if(noOfRow < LIMIT) {
+            PageModel page1 = new PageModel();
+            page1.setStart(0);
+            page1.setLimit(noOfRow);
+            page1.setPageNo(1);
+            paginationUrl.add(page1);
+        } else {
+            int n = (noOfRow/LIMIT);
+            int pageNo;
+            int startIteration = 0;
+            for(pageNo=1; pageNo<=n; pageNo++){
+                PageModel page1 = new PageModel();//
+                page1.setStart((pageNo*LIMIT)-LIMIT);//
+                page1.setLimit((LIMIT));//
+                page1.setPageNo(pageNo);//
+                paginationUrl.add(page1);//
+            }
+
+            System.out.println("paginationUrl: "+paginationUrl.toString());
+
+            int leftNoOfRow = noOfRow - (n*LIMIT);
+
+            System.out.println("leftNoOfRow: "+leftNoOfRow+"  start:"+((pageNo*LIMIT)-LIMIT)+"  pageNo:"+pageNo);
+
+            if(leftNoOfRow>0){
+                PageModel page1 = new PageModel();
+                page1.setStart((n*LIMIT)-LIMIT);
+                page1.setLimit(leftNoOfRow);
+                page1.setPageNo(pageNo);
+                paginationUrl.add(page1);
+            }
+        }
         return paginationUrl;
     }
 
@@ -286,22 +388,7 @@ public class HomeController {
         return tagSet;
     }
 
-
-    @GetMapping("/deleteBlogPost")
-    public String deleteBlogPost(@RequestParam("postId") int postId) {
-        postRepository.deleteById(postId);
-        return "redirect:/";
-    }
-
     PostService postService = new PostService();
-
-    @GetMapping("/updateBlogPost")
-    public String updateBlogPost(@RequestParam("postId") int postId, Model model) {
-        Post post = postService.findPostById(postRepository, postId);
-        //Post post = postRepository.getById(postId);
-        model.addAttribute("post", post);
-        return "post/update_post";
-    }
 
     @PostMapping("post_updated")
     public String postUpdate(@ModelAttribute Post post) {

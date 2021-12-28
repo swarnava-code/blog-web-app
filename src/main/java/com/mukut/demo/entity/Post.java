@@ -37,6 +37,9 @@ public class Post {
     @Column(name = "updated_at")
     String updated_at;
 
+
+
+
     public Integer getId() {
         return id;
     }

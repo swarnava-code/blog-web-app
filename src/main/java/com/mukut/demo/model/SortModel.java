@@ -1,6 +1,5 @@
 package com.mukut.demo.model;
 
-
 public class SortModel {
     private Boolean publishedAt;
     private Boolean excerpt;

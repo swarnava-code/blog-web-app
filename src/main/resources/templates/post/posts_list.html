@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="www.thymeleaf.org">
 <head>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
@@ -15,6 +19,12 @@
             margin:5px;
             padding:5px;
         }
+        #filter{
+        background-color: #fffea8;
+        }
+        #sort{
+        background-color: #b8ffe5;
+        }
     </style>
 </head>
 <body>
@@ -26,7 +36,8 @@
         <div class="form-group-input">
             <form th:action="@{/}">
                 <input type="text" th:value="${search}" th:name="search" placeholder="Search Something!!!"/>
-                <div class="form-group-input">
+                <input type="submit" value="Search"/>
+                <div class="form-group-input" id="filter">
                     Filter by author :<br>
                     <input type="checkbox" name="author" value="swarnava" th:checked="${authorsModel.getSwarnava()}">Swarnava
                     Chakraborty
@@ -42,20 +53,26 @@
                     <input type="checkbox" name="tag" value="motivation" th:checked="${tagsModel.getMotivation()}">Motivation
                     <input type="checkbox" name="tag" value="politics" th:checked="${tagsModel.getPolitics()}">Politics
                     <input type="checkbox" name="tag" value="culture" th:checked="${tagsModel.getCulture()}">Culture
+                    <br><input type="submit" value="Apply Filter"/>
                 </div>
-                <label>Sort by</label>
-                <select name="sortField" id="sort">
-                    <option value="publishedAt" th:selected="${sortModel.getPublishedAt()}">Published Date & Time</option>
-                    <option value="title" th:selected="${sortModel.getTitle()}">Title</option>
-                    <option value="author" th:selected="${sortModel.getAuthor()}">Author</option>
-                    <option value="excerpt" th:selected="${sortModel.getExcerpt()}">Excerpt</option>
-                </select>
-                <label> Order </label>
-                <select name="order" id="order">
-                    <option value="desc" th:selected="${sortModel.getDesc()}">Descending</option>
-                    <option value="asc" th:selected="${sortModel.getAsc()}">Ascending</option>
-                </select>
-                <input type="submit"/>
+
+                <div class="form-group-input" id="sort">
+                    <label>Sort by</label>
+                    <select name="sortField" >
+                        <option value="publishedAt" th:selected="${sortModel.getPublishedAt()}">Published Date & Time</option>
+                        <option value="title" th:selected="${sortModel.getTitle()}">Title</option>
+                        <option value="author" th:selected="${sortModel.getAuthor()}">Author</option>
+                        <option value="excerpt" th:selected="${sortModel.getExcerpt()}">Excerpt</option>
+                    </select>
+                    <label> Order </label>
+                    <select name="order" id="order">
+                        <option value="desc" th:selected="${sortModel.getDesc()}">Descending</option>
+                        <option value="asc" th:selected="${sortModel.getAsc()}">Ascending</option>
+                    </select>
+                    <input type="submit" value="Apply sort"/>
+                </div>
+
+
 
 <!--                <input type="submit" name="left" value="<"/>-->
 <!--                <input type="submit" name="right" value=">"/>-->
@@ -107,9 +124,13 @@
     </tr>
     </tbody>
 </table>
+
+
 <br><br>
 <tr th:each="page : ${pagination_url}">
     <a th:href="@{${page.getUrl()}}" ><span th:text="${page.getPageNo()} "></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
 </tr>
+
+
 </body>
 </html>

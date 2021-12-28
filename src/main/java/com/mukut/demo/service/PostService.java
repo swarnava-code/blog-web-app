@@ -2,6 +2,9 @@ package com.mukut.demo.service;
 
 import com.mukut.demo.entity.Post;
 import com.mukut.demo.repo.PostRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -39,6 +42,13 @@ public class PostService {
         }
         return post;
     }
+
+    public Page<Post> findPaginated(PostRepository postRepository, int pageNo, int pageSize){
+        Pageable pageable = PageRequest.of(pageNo-1,pageSize);
+        return postRepository.findAll(pageable);
+    }
+
+
 
 //    public static String makeDataAndTime() {
 //        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/mm/yyyy HH:mm:ss");
