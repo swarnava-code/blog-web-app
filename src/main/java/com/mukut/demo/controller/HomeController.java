@@ -13,7 +13,6 @@ import com.mukut.demo.repo.TagRepository;
 import com.mukut.demo.repo.UserRepository;
 import com.mukut.demo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,26 +33,13 @@ public class HomeController {
     @Autowired
     private CommentRepository commentRepository;
 
-    final int LIMIT = 4;
+    final int LIMIT = 5;
     PostService postService = new PostService();
     AuthorModel authorModel = new AuthorModel();
     TagModel tagsModel = new TagModel();
+
     SortModel sortModel = new SortModel();
     final int START = 1;
-
-    @GetMapping("test/")
-    public String test(
-            @RequestParam(value = "author", required = false) String author,
-            @RequestParam(value = "start", required = false) Integer start,
-            @RequestParam(value = "limit", required = false) Integer limit,
-            Model model
-    ) {
-        Page<Post> page = postService.findPaginated(postRepository, 1, 10);
-        List<Post> pageContent = page.getContent();
-        System.out.println(pageContent);
-        model.addAttribute("posts_list", pageContent);
-        return "post/posts_list";
-    }
 
     @GetMapping("/")
     public String getBlogList(
@@ -62,6 +48,7 @@ public class HomeController {
             @RequestParam(value = "limit", required = false) Integer limit,
             @RequestParam(value = "author", required = false) String author,
             @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "publishedAt", required = false) String publishedAt,
             @RequestParam(value = "sortField", required = false) String sortField,
             @RequestParam(value = "order", required = false) String order, Model model) {
         List<Post> thePosts = null;
@@ -69,6 +56,10 @@ public class HomeController {
         Set<Post> postByAuthor = null;
         Set<Post> mergedSet = new HashSet<>();
         thePosts = new PostService().findAll(postRepository);
+
+        if (publishedAt != null) {
+            mergedSet.addAll(postService.findByDate(postRepository, publishedAt));
+        }
 
         if (keyword != null && keyword.replaceAll(" ", "").length() != 0) {
             postByKeywordSearch = postRepository.findByKeyword(keyword);
@@ -149,7 +140,6 @@ public class HomeController {
         List<Post> convertedList = new ArrayList<>();
         convertedList.addAll(mergedSet); //convert set to list
 
-
         int size;
         if (start == null) {
             start = 0;
@@ -175,9 +165,11 @@ public class HomeController {
         model.addAttribute("authorsModel", authorModel);
         model.addAttribute("tagsModel", tagsModel);
         model.addAttribute("sortModel", sortModel);
+        model.addAttribute("date", date);
         model.addAttribute("pagination_url", paginationUrl);
         return "post/posts_list";
     }
+    String date = null;
 
     public List<Post> createSubList(List<Post> post, int start, int limit) {
         int fromIndex = start, toIndex = limit, size = post.size();

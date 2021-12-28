@@ -13,7 +13,6 @@ import java.util.List;
 public class TagService {
 
     public void saveEachTag(TagRepository tagRepository, String string, Integer id, String createdAt, String updatedAt) {
-        //Tag tag = new Tag();
         string = string.replaceAll(" ", "");
         List<String> tagList = Arrays.asList(string.split(","));
         for (String tag : tagList) {
@@ -23,7 +22,6 @@ public class TagService {
             tagEntity.setUpdatedAt(updatedAt);
             tagEntity.setName(tag);
             tagRepository.save(tagEntity);
-            System.out.println(tagEntity.toString());
         }
     }
 

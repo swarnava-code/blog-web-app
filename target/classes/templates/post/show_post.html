@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <title>Post</title>
     <style>
     body{
@@ -15,82 +15,90 @@
         margin:5px;
         padding:5px;
     }
+
     </style>
 </head>
 <body>
-  <center>
-      <br>
-      <div class="project">
-          <title_name th:text="${post.title}">Basic Concept of IoC & Dependency Injection in Spring Framework</title_name>
-          <br><hr>
-          <author th:text="${post.author}">Swarnava Kumar Chakraborty</author>
-          <comma>,</comma>
-          <date th:text="${post.published_at}">12/09/2020</date>
-          <br><hr>
-          <story th:text="${post.content}">Before starting IoC, it is important to know what is Loosely Coupling Components. Loosely Coupling Components are weakly associated with…</story>
-      </div>
-<br>
-      <br><br><hr>
-      <table>
-          <thead>
-          <tr>
-              <th> Tag </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:if="${tags.empty}">
-              <td colspan="2"> No Tag Available </td>
-          </tr>
-          <tr th:each="tag : ${tags}">
-              <td><span th:text="${tag.name}"> </span></td>
-          </tr>
-          </tbody>
-      </table>
-      <br><br><hr>
-      <h4>Users Comments:-</h4>
-      <table>
-          <thead>
-          <tr>
-              <th> Name </th>
-              <th> Posted on </th>
-              <th> Last modified </th>
-              <th> Comment </th>
-              <th> Action </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:if="${comments.empty}">
-              <td colspan="2"> There is no Comments </td>
-          </tr>
-          <tr th:each="comment : ${comments}">
-              <td><span th:text="${comment.name}"> </span></td>
-              <td><span th:text="${comment.createdAt}"> </span></td>
-              <td><span th:text="${comment.updatedAt}"> </span></td>
-              <td><span th:text="${comment.comment}"> </span></td>
-              <td>
-                  <a th:href="@{showBlogPost/updateComment(id=${comment.id})}"
-                     class="btn btn-info btn-sm">
-                      Update
-                  </a>
-                  <a th:href="@{showBlogPost/deleteComment(id=${comment.id})}"
-                     class="btn btn-danger btn-sm"
-                     onclick="if (!(confirm('Are you sure you want to delete this comment?'))) return false">
-                      Delete
-                  </a>
-              </td>
-          </tr>
-          </tbody>
-      </table>
-      <br><hr>
-      <h3>Enter your comment here</h3>
-      <form action="comments_submitted" method="post" th:object="${comments}">
-          <!-- take id from post and include into post_id of comment object-->
-          <input type="hidden" name="postId" th:value="${post.id}"  /><br>
-          <input type="text" name="name" placeholder="Enter Name" /><br>
-          <input type="text" name="email" placeholder="Enter Mail" /><br>
-          <input type="text" name="comment" placeholder="Enter Comment" /><br>
-          <button type="submit">Submit</button>
-      </form>
-  </center>
+<center>
+    <br>
+    <div class="project">
+        <title_name th:text="${post.title}">Basic Concept of IoC & Dependency Injection in Spring Framework</title_name>
+        <br>
+        <hr>
+        <author th:text="${post.author}">Swarnava Kumar Chakraborty</author>
+        <comma>,</comma>
+        <date th:text="${post.published_at}">12/09/2020</date>
+        <br>
+        <hr>
+        <story th:text="${post.content}">Before starting IoC, it is important to know what is Loosely Coupling
+            Components. Loosely Coupling Components are weakly associated with…
+        </story>
+    </div>
+    <br>
+    <br><br>
+    <hr>
+    <table>
+        <thead>
+        <tr>
+            <th> Tag</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${tags.empty}">
+            <td colspan="2"> No Tag Available</td>
+        </tr>
+        <tr th:each="tag : ${tags}">
+            <td><span th:text="${tag.name}"> </span></td>
+        </tr>
+        </tbody>
+    </table>
+    <br><br>
+    <hr>
+    <h4>Users Comments:-</h4>
+    <table>
+        <thead>
+        <tr>
+            <th> Name</th>
+            <th> Posted on</th>
+            <th> Last modified</th>
+            <th> Comment</th>
+            <th> Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${comments.empty}">
+            <td colspan="2"> There is no Comments</td>
+        </tr>
+        <tr th:each="comment : ${comments}">
+            <td><span th:text="${comment.name}"> </span></td>
+            <td><span th:text="${comment.createdAt}"> </span></td>
+            <td><span th:text="${comment.updatedAt}"> </span></td>
+            <td><span th:text="${comment.comment}"> </span></td>
+            <td>
+                <a th:href="@{showBlogPost/updateComment(id=${comment.id})}"
+                   class="btn btn-info btn-sm">
+                    Update
+                </a>
+                <a th:href="@{showBlogPost/deleteComment(id=${comment.id})}"
+                   class="btn btn-danger btn-sm"
+                   onclick="if (!(confirm('Are you sure you want to delete this comment?'))) return false">
+                    Delete
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <hr>
+    <h3>Enter your comment here</h3>
+    <form action="comments_submitted" method="post" th:object="${comments}">
+        <!-- take id from post and include into post_id of comment object-->
+        <input type="hidden" name="postId" th:value="${post.id}"/><br>
+        <input type="text" name="name" placeholder="Enter Name"/><br>
+        <input type="text" name="email" placeholder="Enter Mail"/><br>
+        <input type="text" name="comment" placeholder="Enter Comment"/><br>
+        <button type="submit">Submit</button>
+    </form>
+</center>
 </body>
 </html>

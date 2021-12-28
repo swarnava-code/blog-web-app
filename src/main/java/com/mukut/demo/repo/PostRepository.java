@@ -17,4 +17,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     @Query(value = "select * from posts u where lower(u.author) like lower(concat('%', :keyword,'%')) ", nativeQuery = true)
     Set<Post> findByAuthor(@Param("keyword") String keyword);
+
+    @Query(value = "select * from posts u where u.published_at like concat('%', :date,'%') ", nativeQuery = true)
+    Set<Post> findByDate(@Param("date") String date);
 }

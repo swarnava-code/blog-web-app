@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @Controller
 public class PostController {
     @Autowired
@@ -33,7 +32,6 @@ public class PostController {
         return "post/newpost";
     }
 
-
     @PostMapping("/newpost_submitted")
     public String newpost_submit(@ModelAttribute Post posts, @RequestParam("tags") String tags) {
         Post postInserted = new PostService().save(postRepository, posts);
@@ -43,8 +41,7 @@ public class PostController {
 
     @PostMapping("post_updated")
     public String postUpdate(@ModelAttribute Post post) {
-        postService.save(postRepository, post);
+        postService.update(postRepository, post);
         return "redirect:/";
     }
-
 }
