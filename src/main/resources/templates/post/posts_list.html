@@ -11,19 +11,19 @@
           integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <title>Posts</title>
     <style>
-        body{
+        body {
             margin:20px;
             padding:20px;
         }
-        td, th{
+        td, th {
             margin:5px;
             padding:5px;
         }
-        #filter{
-        background-color: #fffea8;
+        #filter {
+            background-color: #fffea8;
         }
-        #sort{
-        background-color: #b8ffe5;
+        #sort {
+            background-color: #b8ffe5;
         }
     </style>
 </head>
@@ -55,11 +55,11 @@
                     <input type="checkbox" name="tag" value="culture" th:checked="${tagsModel.getCulture()}">Culture
                     <br><input type="submit" value="Apply Filter"/>
                 </div>
-
                 <div class="form-group-input" id="sort">
                     <label>Sort by</label>
-                    <select name="sortField" >
-                        <option value="publishedAt" th:selected="${sortModel.getPublishedAt()}">Published Date & Time</option>
+                    <select name="sortField">
+                        <option value="publishedAt" th:selected="${sortModel.getPublishedAt()}">Published Date & Time
+                        </option>
                         <option value="title" th:selected="${sortModel.getTitle()}">Title</option>
                         <option value="author" th:selected="${sortModel.getAuthor()}">Author</option>
                         <option value="excerpt" th:selected="${sortModel.getExcerpt()}">Excerpt</option>
@@ -71,12 +71,6 @@
                     </select>
                     <input type="submit" value="Apply sort"/>
                 </div>
-
-
-
-<!--                <input type="submit" name="left" value="<"/>-->
-<!--                <input type="submit" name="right" value=">"/>-->
-
             </form>
         </div>
         <form action="newpost" method="get">
@@ -124,13 +118,9 @@
     </tr>
     </tbody>
 </table>
-
-
 <br><br>
 <tr th:each="page : ${pagination_url}">
-    <a th:href="@{${page.getUrl()}}" ><span th:text="${page.getPageNo()} "></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a th:href="@{${page.getUrl()}}"><span th:text="${page.getPageNo()} "></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
 </tr>
-
-
 </body>
 </html>

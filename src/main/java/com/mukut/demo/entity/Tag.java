@@ -3,26 +3,20 @@ package com.mukut.demo.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name="tags")
+@Table(name = "tags")
 public class Tag {
 
     @Id
-    @Column(name="id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(name="post_id")
+    @Column(name = "post_id")
     private int postId;
 
     @Override
     public String toString() {
-        return "Tag{" +
-                "id=" + id +
-                ", postId=" + postId +
-                ", name='" + name + '\'' +
-                ", created_at='" + createdAt + '\'' +
-                ", updated_at='" + updatedAt + '\'' +
-                '}';
+        return "Tag{" + "id=" + id + ", postId=" + postId + ", name='" + name + '\'' + ", created_at='" + createdAt + '\'' + ", updated_at='" + updatedAt + '\'' + '}';
     }
 
     public int getPostId() {
@@ -33,13 +27,13 @@ public class Tag {
         this.postId = postId;
     }
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name="created_at")
+    @Column(name = "created_at")
     private String createdAt;
 
-    @Column(name="updated_at")
+    @Column(name = "updated_at")
     private String updatedAt;
 
     public int getId() {

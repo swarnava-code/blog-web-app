@@ -3,7 +3,7 @@ package com.mukut.demo.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -50,11 +50,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "fname='" + fname + '\'' +
-                ", lname='" + lname + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+        return "User{" + "fname='" + fname + '\'' + ", lname='" + lname + '\'' + ", email='" + email + '\'' + '}';
     }
 
     public String getEmail() {

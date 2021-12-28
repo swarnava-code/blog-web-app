@@ -5,22 +5,17 @@
     <title>User List</title>
 </head>
 <body>
-
-user 5 fname:
-<h3 th:text="${user5}">user 5 fname</h3>
-
-
 <table>
     <thead>
     <tr>
-        <th> Email </th>
-        <th> First Name </th>
-        <th> Last Name </th>
+        <th> Email</th>
+        <th> First Name</th>
+        <th> Last Name</th>
     </tr>
     </thead>
     <tbody>
     <tr th:if="${users_list.empty}">
-        <td colspan="2"> No Books Available </td>
+        <td colspan="2"> No Books Available</td>
     </tr>
     <tr th:each="book : ${users_list}">
         <td><span th:text="${book.email}"> email </span></td>
@@ -29,6 +24,5 @@ user 5 fname:
     </tr>
     </tbody>
 </table>
-
 </body>
 </html>

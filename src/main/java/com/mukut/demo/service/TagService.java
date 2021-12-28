@@ -12,11 +12,11 @@ import java.util.List;
 @Service
 public class TagService {
 
-    public void saveEachTag(TagRepository tagRepository, String string, Integer id, String createdAt, String updatedAt){
+    public void saveEachTag(TagRepository tagRepository, String string, Integer id, String createdAt, String updatedAt) {
         //Tag tag = new Tag();
         string = string.replaceAll(" ", "");
         List<String> tagList = Arrays.asList(string.split(","));
-        for(String tag : tagList){
+        for (String tag : tagList) {
             Tag tagEntity = new Tag();
             tagEntity.setPostId(id);
             tagEntity.setCreatedAt(createdAt);
@@ -27,11 +27,11 @@ public class TagService {
         }
     }
 
-    public List<Post> findAll(PostRepository postsRepository){
+    public List<Post> findAll(PostRepository postsRepository) {
         return postsRepository.findAll();
     }
 
-    public List<Tag> findByPostId(TagRepository tagRepository, Integer postId){
+    public List<Tag> findByPostId(TagRepository tagRepository, Integer postId) {
         return tagRepository.findByPostId(postId);
     }
 

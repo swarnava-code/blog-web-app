@@ -1,7 +1,6 @@
 package com.mukut.demo.comparator;
 
 import com.mukut.demo.entity.Post;
-
 import java.util.Comparator;
 
 public class PostAuthorComparatorAsc implements Comparator<Post> {

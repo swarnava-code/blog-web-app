@@ -1,6 +1,5 @@
 package com.mukut.demo.model;
 
-
 public class AuthorModel {
     private Boolean swarnava;
     private Boolean dhritimoy;
@@ -38,15 +37,5 @@ public class AuthorModel {
     public void setGuddu(Boolean guddu) {
         this.guddu = guddu;
     }
-
-    //    private Map<String, Boolean> authors = new HashMap<String, Boolean>();
-//
-//    public void setAuthors(Map<String, Boolean> authors) {
-//        this.authors = authors;
-//    }
-//
-//    public Map<String, Boolean> getAuthors() {
-//        return authors;
-//    }
 
 }

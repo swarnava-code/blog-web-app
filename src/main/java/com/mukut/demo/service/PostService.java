@@ -2,6 +2,7 @@ package com.mukut.demo.service;
 
 import com.mukut.demo.entity.Post;
 import com.mukut.demo.repo.PostRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,8 @@ import java.util.Optional;
 @Service
 public class PostService {
     final int EXCERPT_LIMIT = 20;
-    public Post save(PostRepository postsRepository, Post posts){
+
+    public Post save(PostRepository postsRepository, Post posts) {
         String timestamp = new HelperService().makeDataAndTime();
         String excerpt = new HelperService().makeExcerpt(posts.getContent(), EXCERPT_LIMIT);
         posts.setCreated_at(timestamp);
@@ -25,29 +27,27 @@ public class PostService {
         return postsInsertInfo;
     }
 
-    public List<Post> findAll(PostRepository postsRepository){
+    public List<Post> findAll(PostRepository postsRepository) {
         return postsRepository.findAll();
     }
 
     @Transactional
-    public Post findPostById(PostRepository postRepository, int id){
+    public Post findPostById(PostRepository postRepository, int id) {
         Optional<Post> optionalResult = postRepository.findById(id);
         Post post = null;
 
         if (optionalResult.isPresent()) {
             post = optionalResult.get();
-        }
-        else {
+        } else {
             throw new RuntimeException("Did not find post id - " + id);
         }
         return post;
     }
 
-    public Page<Post> findPaginated(PostRepository postRepository, int pageNo, int pageSize){
-        Pageable pageable = PageRequest.of(pageNo-1,pageSize);
+    public Page<Post> findPaginated(PostRepository postRepository, int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         return postRepository.findAll(pageable);
     }
-
 
 
 //    public static String makeDataAndTime() {

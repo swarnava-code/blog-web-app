@@ -3,16 +3,16 @@ package com.mukut.demo.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name="comments")
+@Table(name = "comments")
 public class Comment {
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
-    @Column(name="email")
+    @Column(name = "email")
     private String email;
 
-    @Column(name="comment")
+    @Column(name = "comment")
     private String comment;
 
     @Id
@@ -20,16 +20,14 @@ public class Comment {
     @Column(name = "id")
     private int id;
 
-    @Column(name="post_id")
+    @Column(name = "post_id")
     private int postId;
 
-    @Column(name="created_at")
+    @Column(name = "created_at")
     private String createdAt;
 
-    @Column(name="updated_at")
-    private String  updatedAt;
-
-
+    @Column(name = "updated_at")
+    private String updatedAt;
 
     public int getId() {
         return id;
@@ -89,14 +87,6 @@ public class Comment {
 
     @Override
     public String toString() {
-        return "Comment{" +
-                "id=" + id +
-                ", postId=" + postId +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", comment='" + comment + '\'' +
-                ", createdAt='" + createdAt + '\'' +
-                ", updatedAt='" + updatedAt + '\'' +
-                '}';
+        return "Comment{" + "id=" + id + ", postId=" + postId + ", name='" + name + '\'' + ", email='" + email + '\'' + ", comment='" + comment + '\'' + ", createdAt='" + createdAt + '\'' + ", updatedAt='" + updatedAt + '\'' + '}';
     }
 }

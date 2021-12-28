@@ -1,10 +1,9 @@
 package com.mukut.demo.entity;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 
 @Entity
-@Table(name="posts")
+@Table(name = "posts")
 public class Post {
 
     @Id
@@ -12,7 +11,7 @@ public class Post {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name="title")
+    @Column(name = "title")
     private String title;
 
     @Column(name = "excerpt")
@@ -38,8 +37,6 @@ public class Post {
     String updated_at;
 
 
-
-
     public Integer getId() {
         return id;
     }
@@ -54,16 +51,7 @@ public class Post {
 
     @Override
     public String toString() {
-        return "Posts{" +
-                ", title='" + title + '\'' +
-                ", excerpt='" + excerpt + '\'' +
-                ", content='" + content + '\'' +
-                ", author='" + author + '\'' +
-                ", published_at='" + published_at + '\'' +
-                ", is_published='" + is_published + '\'' +
-                ", created_at='" + created_at + '\'' +
-                ", updated_at='" + updated_at + '\'' +
-                '}';
+        return "Posts{" + ", title='" + title + '\'' + ", excerpt='" + excerpt + '\'' + ", content='" + content + '\'' + ", author='" + author + '\'' + ", published_at='" + published_at + '\'' + ", is_published='" + is_published + '\'' + ", created_at='" + created_at + '\'' + ", updated_at='" + updated_at + '\'' + '}';
     }
 
     public void setTitle(String title) {
@@ -97,7 +85,6 @@ public class Post {
     public void setUpdated_at(String updated_at) {
         this.updated_at = updated_at;
     }
-
 
     public String getTitle() {
         return title;

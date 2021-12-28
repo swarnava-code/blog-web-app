@@ -2,7 +2,6 @@ package com.mukut.demo.repo;
 
 import com.mukut.demo.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
