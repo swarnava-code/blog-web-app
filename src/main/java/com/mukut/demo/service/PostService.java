@@ -2,6 +2,8 @@ package com.mukut.demo.service;
 
 import com.mukut.demo.entity.Post;
 import com.mukut.demo.repo.PostRepository;
+import com.mukut.demo.util.HelperUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,21 +19,21 @@ public class PostService {
     final int EXCERPT_LIMIT = 20;
 
     public Post save(PostRepository postsRepository, Post posts) {
-        String timestamp = new HelperService().makeDataAndTime();
-        String excerpt = new HelperService().makeExcerpt(posts.getContent(), EXCERPT_LIMIT);
-        posts.setCreated_at(timestamp);
-        posts.setUpdated_at(timestamp);
-        posts.setPublished_at(timestamp);
+        String timestamp = new HelperUtil().makeDataAndTime();
+        String excerpt = new HelperUtil().makeExcerpt(posts.getContent(), EXCERPT_LIMIT);
+        posts.setCreatedAt(timestamp);
+        posts.setUpdatedAt(timestamp);
+        posts.setPublishedAt(timestamp);
         posts.setExcerpt(excerpt);
         Post postsInsertInfo = postsRepository.save(posts);
         return postsInsertInfo;
     }
 
     public Post update(PostRepository postsRepository, Post posts) {
-        String timestamp = new HelperService().makeDataAndTime();
-        String excerpt = new HelperService().makeExcerpt(posts.getContent(), EXCERPT_LIMIT);
-        posts.setUpdated_at(timestamp);
-        posts.setPublished_at(timestamp);
+        String timestamp = new HelperUtil().makeDataAndTime();
+        String excerpt = new HelperUtil().makeExcerpt(posts.getContent(), EXCERPT_LIMIT);
+        posts.setUpdatedAt(timestamp);
+        posts.setPublishedAt(timestamp);
         posts.setExcerpt(excerpt);
         Post postsInsertInfo = postsRepository.save(posts);
         return postsInsertInfo;
@@ -60,9 +62,13 @@ public class PostService {
         return post;
     }
 
-    public Page<Post> findPaginated(PostRepository postRepository, int pageNo, int pageSize) {
+    public Page<Post> findPaginated(PostRepository postRepository ,int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         return postRepository.findAll(pageable);
+    }
+
+    public Set<Post>  findByKeyword(PostRepository postRepository ,String keyword){
+        return postRepository.findByKeyword(keyword);
     }
 
 }

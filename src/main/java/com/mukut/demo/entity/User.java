@@ -20,37 +20,37 @@ public class User {
     }
 
     @Column(name = "firstname")
-    private String fname;
+    private String firstName;
 
     @Column(name = "lastname")
-    private String lname;
+    private String lastName;
 
     @Column(name = "email")
     private String email;
 
-    public void setFname(String fname) {
-        this.fname = fname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setLname(String lname) {
-        this.lname = lname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getFname() {
-        return fname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public String getLname() {
-        return lname;
+    public String getLastName() {
+        return lastName;
     }
 
     @Override
     public String toString() {
-        return "User{" + "fname='" + fname + '\'' + ", lname='" + lname + '\'' + ", email='" + email + '\'' + '}';
+        return "User{" + "fname='" + firstName + '\'' + ", lname='" + lastName + '\'' + ", email='" + email + '\'' + '}';
     }
 
     public String getEmail() {

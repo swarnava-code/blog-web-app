@@ -39,7 +39,7 @@ public class UserController {
     @PostMapping("/register_done")
     public String register(@ModelAttribute User user, Model model) {
         User userDetails = new UserService().save(userRepository, user);
-        model.addAttribute("message", userDetails.getFname() + " inserted.\n");
+        model.addAttribute("message", userDetails.getFirstName() + " inserted.\n");
         return "welcome";
     }
 

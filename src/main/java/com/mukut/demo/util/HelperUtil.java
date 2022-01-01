@@ -1,11 +1,11 @@
-package com.mukut.demo.service;
+package com.mukut.demo.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
-public class HelperService {
+public class HelperUtil {
     public static String makeDataAndTime() {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();

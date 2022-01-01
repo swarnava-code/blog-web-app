@@ -28,7 +28,9 @@ public class BlogController {
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
     private PostService postService = new PostService();
+
     private CommentService commentService = new CommentService();
     private TagService tagService = new TagService();
 

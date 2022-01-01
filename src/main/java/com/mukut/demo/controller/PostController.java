@@ -35,7 +35,7 @@ public class PostController {
     @PostMapping("/newpost_submitted")
     public String newpost_submit(@ModelAttribute Post posts, @RequestParam("tags") String tags) {
         Post postInserted = new PostService().save(postRepository, posts);
-        tagService.saveEachTag(tagRepository, tags, postInserted.getId(), postInserted.getCreated_at(), postInserted.getUpdated_at());
+        tagService.saveEachTag(tagRepository, tags, postInserted.getId(), postInserted.getCreatedAt(), postInserted.getUpdatedAt());
         return "redirect:/";
     }
 

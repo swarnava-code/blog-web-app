@@ -25,16 +25,16 @@ public class Post {
     private String author;
 
     @Column(name = "published_at")
-    private String published_at;
+    private String publishedAt;
 
     @Column(name = "is_published")
-    boolean is_published;
+    boolean isPublished;
 
     @Column(name = "created_at")
-    String created_at;
+    String createdAt;
 
     @Column(name = "updated_at")
-    String updated_at;
+    String updatedAt;
 
 
     public Integer getId() {
@@ -45,13 +45,13 @@ public class Post {
         this.id = id;
     }
 
-    public boolean isIs_published() {
-        return is_published;
+    public boolean isPublished() {
+        return isPublished;
     }
 
     @Override
     public String toString() {
-        return "Posts{" + ", title='" + title + '\'' + ", excerpt='" + excerpt + '\'' + ", content='" + content + '\'' + ", author='" + author + '\'' + ", published_at='" + published_at + '\'' + ", is_published='" + is_published + '\'' + ", created_at='" + created_at + '\'' + ", updated_at='" + updated_at + '\'' + '}';
+        return "Posts{" + ", title='" + title + '\'' + ", excerpt='" + excerpt + '\'' + ", content='" + content + '\'' + ", author='" + author + '\'' + ", published_at='" + publishedAt + '\'' + ", is_published='" + isPublished + '\'' + ", created_at='" + createdAt + '\'' + ", updated_at='" + updatedAt + '\'' + '}';
     }
 
     public void setTitle(String title) {
@@ -70,20 +70,20 @@ public class Post {
         this.author = author;
     }
 
-    public void setPublished_at(String published_at) {
-        this.published_at = published_at;
+    public void setPublishedAt(String publishedAt) {
+        this.publishedAt = publishedAt;
     }
 
-    public void setIs_published(boolean is_published) {
-        this.is_published = is_published;
+    public void setPublished(boolean published) {
+        this.isPublished = published;
     }
 
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public void setUpdated_at(String updated_at) {
-        this.updated_at = updated_at;
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getTitle() {
@@ -102,20 +102,20 @@ public class Post {
         return author;
     }
 
-    public String getPublished_at() {
-        return published_at;
+    public String getPublishedAt() {
+        return publishedAt;
     }
 
     public boolean getIs_published() {
-        return is_published;
+        return isPublished;
     }
 
-    public String getCreated_at() {
-        return created_at;
+    public String getCreatedAt() {
+        return createdAt;
     }
 
-    public String getUpdated_at() {
-        return updated_at;
+    public String getUpdatedAt() {
+        return updatedAt;
     }
 
 }

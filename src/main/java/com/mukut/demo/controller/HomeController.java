@@ -12,6 +12,7 @@ import com.mukut.demo.repo.PostRepository;
 import com.mukut.demo.repo.TagRepository;
 import com.mukut.demo.repo.UserRepository;
 import com.mukut.demo.service.*;
+import com.mukut.demo.util.HelperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,17 +58,17 @@ public class HomeController {
         Set<Post> mergedSet = new HashSet<>();
         thePosts = new PostService().findAll(postRepository);
 
-        if (publishedAt != null) {
+        if (publishedAt != null && publishedAt.length()>1) {
             mergedSet.addAll(postService.findByDate(postRepository, publishedAt));
         }
 
         if (keyword != null && keyword.replaceAll(" ", "").length() != 0) {
-            postByKeywordSearch = postRepository.findByKeyword(keyword);
+            postByKeywordSearch = postService.findByKeyword( postRepository ,keyword);
             mergedSet.addAll(searchTag(keyword));
             model.addAttribute("search", keyword);
         }
         if (author != null && author.length() > 1 && (!author.equals("all"))) {
-            List<String> authorList = new HelperService().makeListFromCSV(author);
+            List<String> authorList = new HelperUtil().makeListFromCSV(author);
             authorModel.setSwarnava(false);
             authorModel.setGuddu(false);
             authorModel.setKalaiya(false);
@@ -96,7 +97,7 @@ public class HomeController {
         }
 
         if (tag != null && tag.length() > 1 && (!tag.equals("all"))) {
-            List<String> tagList = new HelperService().makeListFromCSV(tag);
+            List<String> tagList = new HelperUtil().makeListFromCSV(tag);
 
             tagsModel.setTechnology(false);
             tagsModel.setLifestyle(false);
